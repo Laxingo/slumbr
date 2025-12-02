@@ -1,88 +1,82 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+<script>
+import Dashboard from "./DashboardView.vue";
+import { isAuthenticated, loginWithGitHub, logout } from "../login.js";
+
+export default {
+  name: "Home",
+  components: { Dashboard },
+  methods: {
+    isAuthenticated,
+    loginWithGitHub,
+    logout
+  }
+};
 </script>
 
 <template>
-  <section class="home-container">
-    <div class="hero">
-      <h1 class="title">Slumbr — Sleep Tracker</h1>
-      <p class="subtitle">
-        Acompanha o teu sono. Melhora hábitos. Sobe de nível.
-      </p>
-      <router-link to="/sleep" class="btn-primary">
-        Começar
-      </router-link>
-    </div>
+  <div>
+    <header v-if="!isAuthenticated()">
+      <nav>
+        <a href="/">slumbr</a>
+        <div style="float:right;">
+          <button v-if="!isAuthenticated()" class="button button-login" @click="loginWithGitHub">Login with GitHub</button>
+          <button v-if="isAuthenticated()" class="button button-logout" @click="logout">Logout</button>
+        </div>
+      </nav>
+    </header>
 
-    <div class="features">
-      <div class="card">
-        <h3>Regista o teu sono</h3>
-        <p>Anota as horas dormidas todos os dias.</p>d
-      </div>
+    <Dashboard v-if="isAuthenticated()" />
 
-      <div class="card">
-        <h3>Estatísticas</h3>
-        <p>Descobre padrões de sono através de gráficos.</p>
-      </div>
+    <main v-if="!isAuthenticated()">
+      <section class="container text-center">
+        <h1>Welcome to Slumbr</h1>
+        <p>Track your sleep effortlessly and improve your health.</p>
+        <button class="button button-start">Get Started</button>
+      </section>
 
-      <div class="card">
-        <h3>Gamificação</h3>     
-        <p>Ganha XP, sobe de nível e desbloqueia badges.</p>
+      <section class="container">
+        <div class="feature-card">
+          <div class="icon-circle">🛌</div>
+          <h2>Sleep Tracking</h2>
+          <p>Monitor your sleep patterns and improve your rest.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon-circle">📊</div>
+          <h2>Analytics</h2>
+          <p>Analyze trends and optimize your sleep schedule.</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon-circle">⏰</div>
+          <h2>Smart Alarm</h2>
+          <p>Wake up at the perfect time feeling refreshed.</p>
+        </div>
+      </section>
+
+      <section class="container text-center">
+        <h2>Get Started in 3 Steps</h2>
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Create an Account</h3>
+          <p>Sign up and start tracking your sleep.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Log Your Sleep</h3>
+          <p>Track your sleep easily every night.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Improve Your Health</h3>
+          <p>Get insights and improve your sleep quality.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Slumbr. All rights reserved.</p>
+      <div>
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact</a>
       </div>
-    </div>
-  </section>
+    </footer>
+  </div>
 </template>
-
-<style scoped>
-.home-container {
-  padding: 40px;
-  text-align: center;
-}
-
-.hero {
-  margin-bottom: 50px;
-}
-
-.title {
-  font-size: 3rem;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.subtitle {
-  font-size: 1.2rem;
-  opacity: 0.7;
-  margin-bottom: 30px;
-}
-
-.btn-primary {
-  display: inline-block;
-  background: #4f46e5;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.2s ease;
-}
-
-.btn-primary:hover {
-  background: #4338ca;
-}
-
-.features {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.card {
-  width: 260px;
-  padding: 20px;
-  border-radius: 12px;
-  background: #fafafa;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-</style>
-

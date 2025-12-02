@@ -1,0 +1,154 @@
+/* Home.vue Sleep Tracker Styles */
+
+/* Layout geral */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Headers */
+header {
+  margin-bottom: 2rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #4F46E5; /* Roxo relaxante */
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+nav a:hover {
+  color: #6366F1;
+}
+
+/* Botões */
+.button {
+  cursor: pointer;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.button-login {
+  background-color: #A5B4FC; /* Azul suave */
+  color: #1E3A8A;
+}
+
+.button-login:hover {
+  background-color: #818CF8;
+}
+
+.button-logout {
+  background-color: #6366F1; /* Roxo */
+  color: white;
+}
+
+.button-logout:hover {
+  background-color: #4F46E5;
+}
+
+.button-start {
+  background-color: #818CF8;
+  color: white;
+}
+
+.button-start:hover {
+  background-color: #6366F1;
+}
+
+/* Cards de features */
+.feature-card {
+  background-color: #EEF2FF; /* Lilás muito suave */
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+.feature-card h2 {
+  color: #4F46E5;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: #374151; /* Cinza escuro */
+}
+
+/* Circulo de ícone */
+.feature-card .icon-circle {
+  display: inline-block;
+  background-color: #4F46E5;
+  color: white;
+  padding: 1rem;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+/* Cards de passos */
+.step-card {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.step-card .step-number {
+  display: inline-block;
+  border: 2px solid #4F46E5;
+  color: #4F46E5;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  line-height: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.step-card h3 {
+  font-size: 1.25rem;
+  color: #4F46E5;
+  margin-bottom: 0.5rem;
+}
+
+.step-card p {
+  color: #374151;
+}
+
+/* Seções principais */
+section {
+  padding: 4rem 0;
+}
+
+/* Títulos principais */
+h1 {
+  color: #4F46E5;
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+h2, h3 {
+  margin-bottom: 1rem;
+}
+
+/* Rodapé */
+footer {
+  background-color: #EEF2FF;
+  padding: 2rem;
+  text-align: center;
+  color: #374151;
+}
+
+footer a {
+  color: #4F46E5;
+  margin: 0 0.5rem;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #6366F1;
+}
