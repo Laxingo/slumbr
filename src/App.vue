@@ -9,7 +9,6 @@ const showHeader = computed(() => route.path !== '/');
 
 
 <template>
-  <Header v-if="showHeader"/>
   <router-view />
 </template>
 
