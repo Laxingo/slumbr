@@ -76,3 +76,17 @@ export async function signUpUser(email, password,userName) {
     return createdUser;
   }
 }
+// Retorna o ID do usuário logado (ou null se não estiver logado)
+export function getUserId() {
+  if (!auth.accessToken) return null;
+
+  try {
+    const decoded = atob(auth.accessToken); // transforma Base64 de volta em "id:email"
+    const [userId] = decoded.split(":");     // pega só o id
+    return userId;
+  } catch (err) {
+    console.error("Erro ao decodificar token:", err);
+    return null;
+  }
+}
+

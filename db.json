@@ -7,18 +7,46 @@
       "password": "123",
       "level": 1,
       "xp": 0
+    },
+    {
+      "id": "dd9b",
+      "userName": "test",
+      "email": "test@gmail.com",
+      "password": "123",
+      "level": 1,
+      "xp": 0
     }
   ],
-  "sleepRegist": [
+  "sleepData": [
     {
-      "userId": "",
+      "userId": "17c5",
       "id": 1,
       "date": 1767365069387,
-      "sleepTime": 1767310200000,
-      "wakeTime": 1767343500000,
+      "bedTime": 1767310200000,
+      "wakeUpTime": 1767343500000,
       "duration": 34500000,
       "quality": 4,
       "notes": "good sleep with no interruptions"
+    },
+    {
+      "userId": "17c5",
+      "id": 2,
+      "date": 1767451469387,
+      "bedTime": 1767396600000,
+      "wakeUpTime": 1767429900000,
+      "duration": 33300000,
+      "quality": 3,
+      "notes": "Woke up once during night"
+    },
+        {
+      "userId": "dd9b",
+      "id": 2,
+      "date": 1767451469387,
+      "bedTime": 1767396600000,
+      "wakeUpTime": 1767429900000,
+      "duration": 33300000,
+      "quality": 3,
+      "notes": "Woke up once during night"
     }
   ]
 }
