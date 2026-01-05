@@ -53,7 +53,13 @@ function formatDuration(ms) {
   return `${hours}h ${minutes}m`;
 }
 
-function editSleep(id) {
-  alert(`Edit sleep entry with id: ${id}`);
+async function editSleep(id) {
+    const createRes = await fetch(`http://localhost:3000/sleepData?id=${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
 }
 </script>
