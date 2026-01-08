@@ -3,12 +3,14 @@ import HomeView from './views/HomeView.vue'
 import DashboardView from './views/DashboardView.vue'
 import LoginView from './views/LoginView.vue'
 import SignUp from './views/SignUp.vue'
+import AdminView from './views/AdminView.vue'
 
 const routes = [
   { path: '/', component: HomeView },
   { path: '/dashboard', component: DashboardView },
   { path: '/login', component: LoginView },
-  {path: '/signup', component: SignUp }
+  {path: '/signup', component: SignUp },
+  { path: '/admin', component: AdminView }
 
 ]
 
