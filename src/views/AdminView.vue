@@ -2,6 +2,7 @@
     <div>
         <h1>Admin View</h1>
         <p>Welcome to the admin panel.</p>
+        <button @click="goback()">Go Back</button>
         <h2>User Management</h2>
         <table>
             <tr>
@@ -37,23 +38,27 @@
                 try {
                     const response = await fetch('http://localhost:3000/users');
                     this.users = await response.json();
-                    console.log(this.users);
                 } catch (error) {
                     console.error('Error fetching users:', error);
                 }
             },
             async  deleteUser(userId) {
-                fetch(`http://localhost:3000/users/${userId}`, {
-                    method: 'DELETE'
-                })
-                .then(response => {
-                    if (response.ok) {
-                        this.fetchUsers();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error deleting user:', error);
-                });
+                if (confirm('Are you sure you want to delete this user?')) {
+                    fetch(`http://localhost:3000/users/${userId}`, {
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            this.fetchUsers();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting user:', error);
+                    });
+                }
+            },
+            goback() {
+                this.$router.push('/login');
             }
         },
         mounted() {
@@ -61,7 +66,6 @@
         }
     }
 </script>
-
 <style lang="scss" scoped>
 
 </style>

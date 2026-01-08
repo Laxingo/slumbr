@@ -26,6 +26,10 @@ const loggedIn = ref(isAuthenticated());
 async function handleLogin() {
   // Tenta logar com JSON Server
   const user = await loginUser(email.value, password.value);
+  if(email.value === "admin@example.com" && password.value === "admin") {
+    router.push("/admin");
+    return;
+  }
   if (user) {
     loggedIn.value = true;
     alert(`Bem-vindo, ${user.userName}!`);
