@@ -2,11 +2,13 @@
   <div class="login-container">
     <form @submit.prevent="handleLogin" class="login-form">
       <h1>Login</h1>
-      <input type="email" placeholder="Email" v-model="email" required/>
-      <br>
-      <input type="password" placeholder="Password"  v-model="password" required/>
-      <br>
-      <br>
+
+      <input type="email" placeholder="Email" v-model="email" required />
+      <br />
+
+      <input type="password" placeholder="Password" v-model="password" required />
+      <br /><br />
+
       <button class="button button-login" type="submit">Login</button>
       <button class="button button-signup" type="button" @click="goSignUp">Sign Up</button>
     </form>
@@ -14,32 +16,25 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { loginUser, isAuthenticated} from "../auth.js";
-import { useRouter } from "vue-router";
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
-const router = useRouter();
-const email = ref("");
-const password = ref("");
-const loggedIn = ref(isAuthenticated());
+const auth = useAuthStore()
+const route = useRoute()
+const router = useRouter()
+
+const email = ref('')
+const password = ref('')
 
 async function handleLogin() {
-  // Tenta logar com JSON Server
-  const user = await loginUser(email.value, password.value);
-  if(email.value === "admin@example.com" && password.value === "admin") {
-    router.push("/admin");
-    return;
-  }
-  if (user) {
-    loggedIn.value = true;
-    alert(`Bem-vindo, ${user.userName}!`);
-    router.push("/");
-  } else {
-    alert("Email ou senha inválidos!");
-  }
+  const user = await auth.loginUser(email.value, password.value)
+if (user) router.push(route.query.redirect || '/dashboard')
+else alert('Email ou senha inválidos!')
+
 }
 
 function goSignUp() {
-  router.push("/signup");
+  router.push('/signup')
 }
 </script>

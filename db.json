@@ -1,6 +1,15 @@
 {
   "users": [
     {
+      "id": "admin",
+      "userName": "Admin",
+      "email": "admin@example.com",
+      "password": "admin",
+      "level": 1,
+      "xp": 0,
+      "isAdmin": true
+    },
+    {
       "id": "17c5",
       "userName": "aa",
       "email": "ola@gmail.com",
@@ -14,7 +23,7 @@
       "email": "test@gmail.com",
       "password": "123",
       "level": 1,
-      "xp": 0
+      "xp": 20
     },
     {
       "id": "a1f3",
@@ -139,6 +148,26 @@
       "duration": 35640000,
       "quality": 4,
       "notes": "bem bom"
+    },
+    {
+      "id": "3f18",
+      "userId": "dd9b",
+      "date": 1767571200000,
+      "bedTime": 1767644400000,
+      "wakeUpTime": 1767687720000,
+      "duration": 43320000,
+      "quality": 5,
+      "notes": ""
+    },
+    {
+      "id": "24cd",
+      "userId": "dd9b",
+      "date": 1767571200000,
+      "bedTime": 1767738000000,
+      "wakeUpTime": 1767784920000,
+      "duration": 46920000,
+      "quality": 5,
+      "notes": ""
     }
   ],
   "quests": [

@@ -1,12 +1,24 @@
 <script setup>
-import { useRouter } from "vue-router";
-import Dashboard from "./DashboardView.vue";
-import { isAuthenticated, logout } from "../auth.js";
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
-const router = useRouter();
+const router = useRouter()
+const auth = useAuthStore()
+
+const isAuthed = computed(() => auth.isAuthenticated)
 
 function goLogin() {
-  router.push("/login");
+  router.push('/login')
+}
+
+function goDashboard() {
+  router.push('/dashboard')
+}
+
+function doLogout() {
+  auth.logout()
+  router.push('/')
 }
 </script>
 
@@ -18,7 +30,7 @@ function goLogin() {
 
         <div style="float:right;">
           <button
-            v-if="!isAuthenticated()"
+            v-if="!isAuthed"
             class="button button-logout"
             @click="goLogin"
           >
@@ -26,9 +38,9 @@ function goLogin() {
           </button>
 
           <button
-            v-if="isAuthenticated()"
+            v-else
             class="button button-logout"
-            @click="logout"
+            @click="doLogout"
           >
             Logout
           </button>
@@ -36,10 +48,13 @@ function goLogin() {
       </nav>
     </header>
 
-    <!-- dashboard -->
-    <Dashboard v-if="isAuthenticated()" />
+    <main v-if="isAuthed" class="container text-center">
+      <h1>Welcome back</h1>
+      <button class="button button-start" @click="goDashboard">
+        Go to Dashboard
+      </button>
+    </main>
 
-    <!-- landing page -->
     <main v-else>
       <section class="container text-center">
         <h1>Welcome to Slumbr</h1>
