@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
@@ -23,99 +23,258 @@ function doLogout() {
 </script>
 
 <template>
-  <div>
-    <header>
-      <nav>
-        <a href="/">slumbr</a>
+  <div class="home">
 
-        <div style="float:right;">
-          <button
-            v-if="!isAuthed"
-            class="button button-logout"
-            @click="goLogin"
-          >
-            Login
-          </button>
 
-          <button
-            v-else
-            class="button button-logout"
-            @click="doLogout"
-          >
-            Logout
-          </button>
-        </div>
-      </nav>
+    <!-- Header / Nav -->
+    <header class="topbar">
+      <div class="container topbar_inner">
+        <RouterLink to="/" class="brand">
+          <span class="brand_mark">Slumbr</span>
+          <span class="brand_tag">sleep tracking</span>
+        </RouterLink>
+
+        <nav class="nav">
+          <a class="nav_link" href="#features">Features</a>
+          <a class="nav_link" href="#how">How it works</a>
+
+          <div class="nav_actions">
+            <button v-if="isAuthed" class="btn btn-secondary" type="button" @click="goDashboard">
+              Dashboard
+            </button>
+
+            <button v-if="!isAuthed" class="btn btn-primary" type="button" @click="goLogin">
+              Login
+            </button>
+
+            <button v-else class="btn btn-ghost" type="button" @click="doLogout">
+              Logout
+            </button>
+          </div>
+        </nav>
+      </div>
     </header>
 
-    <main v-if="isAuthed" class="container text-center">
-      <h1>Welcome back</h1>
-      <button class="button button-start" @click="goDashboard">
-        Go to Dashboard
-      </button>
+    <!-- Hero -->
+    <main>
+      <section class="hero">
+        <div class="container hero_grid">
+          <div class="hero_content">
+
+
+            <h1 class="hero_title">
+              Sleep better.<br />
+              Track smarter.
+            </h1>
+
+            <p class="hero_subtitle">
+              A calm, premium sleep journal that turns daily logs into clear trends.
+            </p>
+
+            <div class="hero_actions">
+              <button v-if="!isAuthed" class="btn btn-primary btn-lg" type="button" @click="goLogin">
+                Get started
+              </button>
+
+              <button v-else class="btn btn-primary btn-lg" type="button" @click="goDashboard">
+                Open dashboard
+              </button>
+
+              <a class="btn btn-secondary btn-lg" href="#features">
+                Explore features
+              </a>
+            </div>
+
+            <div class="hero_meta">
+              <div class="meta">
+                <div class="meta_value">Fast</div>
+                <div class="meta_label">Daily logging</div>
+              </div>
+              <div class="meta">
+                <div class="meta_value">Clear</div>
+                <div class="meta_label">Visual trends</div>
+              </div>
+              <div class="meta">
+                <div class="meta_value">Improved</div>
+                <div class="meta_label">Sleeping patterns, feel rested and energized</div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- Painel -->
+          <div class="hero_panel">
+            <div class="panel">
+              <div class="panel_top">
+                <div class="panel_dot"></div>
+                <div class="panel_dot"></div>
+                <div class="panel_dot"></div>
+                <div class="panel_title">Preview</div>
+              </div>
+
+              <div class="panel_stats">
+                <div class="stat">
+                  <div class="stat_label">Avg. duration</div>
+                  <div class="stat_value">7h 24m</div>
+                </div>
+
+                <div class="stat">
+                  <div class="stat_label">Avg. regularity</div>
+                  <div class="stat_value">High</div>
+                </div>
+
+                <div class="stat">
+                  <div class="stat_label">Avg. quality</div>
+                  <div class="stat_value">4 / 5</div>
+                </div>
+
+                <div class="stat">
+                  <div class="stat_label">Avg. continuity</div>
+                  <div class="stat_value">Good</div>
+                </div>
+              </div>
+
+              <div class="panel_progress">
+                <div class="progress">
+                  <div class="progress_label">Duration</div>
+                  <div class="progress_bar">
+                    <span style="width: 78%"></span>
+                  </div>
+                </div>
+
+                <div class="progress">
+                  <div class="progress_label">Regularity</div>
+                  <div class="progress_bar">
+                    <span style="width: 82%"></span>
+                  </div>
+                </div>
+
+                <div class="progress">
+                  <div class="progress_label">Quality</div>
+                  <div class="progress_bar">
+                    <span style="width: 64%"></span>
+                  </div>
+                </div>
+
+                <div class="progress">
+                  <div class="progress_label">Continuity</div>
+                  <div class="progress_bar">
+                    <span style="width: 70%"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel_hint">
+                Weekly averages built from simple daily logs.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+      <!-- Features -->
+      <section id="features" class="section">
+        <div class="container">
+          <div class="section_head">
+            <h2 class="section_title">Designed for consistent tracking</h2>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div class="card_icone">*icone fixe*</div>
+              <h3 class="card_title">Sleep logging</h3>
+              <p class="card_text">
+                Log bedtime, wake time, duration, quality, interruptions and notes.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card_icone">*icone fixe*</div>
+              <h3 class="card_title">Trends & insights</h3>
+              <p class="card_text">
+                Visualize your sleep over time and spot patterns that matter.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card_icone">*icone fixe*</div>
+              <h3 class="card_title">Progress system</h3>
+              <p class="card_text">
+                Earn points by improving yourself, feel rested and energized to unlock prizes!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+      <!-- How it works -->
+      <section id="how" class="section section--alt">
+        <div class="container">
+          <div class="section_head">
+            <h2 class="section_title">How it works</h2>
+          </div>
+
+          <div class="grid-3">
+            <div class="step">
+              <div class="step_num">1</div>
+              <h3 class="step_title">Create an account</h3>
+              <p class="step_text">Sign up to start your journey.</p>
+            </div>
+
+            <div class="step">
+              <div class="step_num">2</div>
+              <h3 class="step_title">Log your sleep</h3>
+              <p class="step_text">Add quick entries and see the results.</p>
+            </div>
+
+            <div class="step">
+              <div class="step_num">3</div>
+              <h3 class="step_title">Review and adjust</h3>
+              <p class="step_text">See your patterns and improve your routines.</p>
+            </div>
+          </div>
+
+          <div class="cta-row">
+            <button v-if="!isAuthed" class="btn btn-primary btn-lg" type="button" @click="goLogin">
+              Start now
+            </button>
+
+            <button v-else class="btn btn-primary btn-lg" type="button" @click="goDashboard">
+              Continue
+            </button>
+
+          </div>
+        </div>
+      </section>
     </main>
 
-    <main v-else>
-      <section class="container text-center">
-        <h1>Welcome to Slumbr</h1>
-        <p>Track your sleep effortlessly and improve your health.</p>
-        <button class="button button-start" @click="goLogin">
-          Get Started
-        </button>
-      </section>
 
-      <section class="container">
-        <div class="feature-card">
-          <div class="icon-circle">🛌</div>
-          <h2>Sleep Tracking</h2>
-          <p>Monitor your sleep patterns and improve your rest!</p>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container footer_inner">
+        <div class="footer_left">
+          <div class="footer_brand">Slumbr</div>
+          <div class="footer_copy">© 2026 Slumbr. All rights reserved.</div>
         </div>
 
-        <div class="feature-card">
-          <div class="icon-circle">📊</div>
-          <h2>Progress Dashboard & Statistics</h2>
-          <p>Analyze trends and optimize your sleep schedule.</p>
+        <div class="footer_links">
+          <a href="#" class="footer_link">Privacy</a>
+          <a href="#" class="footer_link">Terms</a>
+          <a href="#" class="footer_link">Contact</a>
         </div>
-
-        <div class="feature-card">
-          <div class="icon-circle">✅</div>
-          <h2>Rewards & Progress System</h2>
-          <p>
-            A motivational system that rewards users for maintaining healthy
-            sleep habits.
-          </p>
-        </div>
-      </section>
-
-      <section class="container text-center">
-        <h2>Get Started in 3 Steps</h2>
-
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <h3>Create an Account</h3>
-          <p>Sign up and start tracking your sleep.</p>
-        </div>
-
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <h3>Log Your Sleep</h3>
-          <p>Track your sleep easily every night.</p>
-        </div>
-
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <h3>Improve Your Health</h3>
-          <p>Get insights and improve your sleep quality.</p>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <p>&copy; 2025 Slumbr. All rights reserved.</p>
-      <div>
-        <a href="#">Privacy Policy</a> |
-        <a href="#">Terms of Service</a> |
-        <a href="#">Contact</a>
       </div>
     </footer>
   </div>
