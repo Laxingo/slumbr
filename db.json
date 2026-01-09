@@ -112,5 +112,42 @@
       "quality": 3,
       "notes": "Woke up once during night"
     }
+  ],
+  "quests": [
+    {
+      "id": "q1",
+      "description": "Log your sleep data for 7 consecutive days",
+      "xpReward": 100
+    },
+    {
+      "id": "q2",
+      "description": "Achieve an average sleep quality of 4 or higher over a week",
+      "xpReward": 150
+    },
+    {
+      "id": "q3",
+      "description": "Sleep at least 8 hours for 5 nights in a week",
+      "xpReward": 200
+    }
+  ],
+  "userQuests": [
+    {
+      "userId": "17c5",
+      "questId": "q1",
+      "progress": 3,
+      "completed": false
+    },
+    {
+      "userId": "17c5",
+      "questId": "q2",
+      "progress": 5,
+      "completed": false
+    },
+    {
+      "userId": "dd9b",
+      "questId": "q1",
+      "progress": 7,
+      "completed": true
+    }
   ]
 }
