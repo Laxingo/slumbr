@@ -6,19 +6,24 @@
       <div class="modal">
         <h2>Add Sleep Data</h2>
         <!-- Formulário para adicionar dados de sono -->
-        <form @submit.prevent="closeOverlay()">
+        <form @submit.prevent="addSleepData({userId,date: Date.parse(date), bedTime: Date.parse(bedTime), wakeUpTime: Date.parse(wakeUpTime), 
+          duration: Date.parse(wakeUpTime) - Date.parse(bedTime), quality, notes })">
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required v-model="date" />
+          <br>
           <label for="bedTime">Bed Time:</label>
-          <input type="datetime-local" id="bedTime" name="bedTime" required />
+          <input type="datetime-local" id="bedTime" name="bedTime" required v-model="bedTime" />
           <br>
           <label for="wakeUpTime">Wake Up Time:</label>
-          <input type="datetime-local" id="wakeUpTime" name="wakeUpTime" required />
+          <input type="datetime-local" id="wakeUpTime" name="wakeUpTime" required v-model="wakeUpTime" />
           <br>
-          <select>
+          <select v-model="quality">
+            <option value="">Select Quality</option>
             <option v-for="n in 5" :key="n" :value="n">{{ n }}</option>
           </select>
           <br>
           <label for="notes">Notes:</label>
-          <textarea id="notes" name="notes"></textarea>
+          <textarea id="notes" name="notes" v-model="notes"></textarea>
           <br>
           <button type="submit">Add</button>
           <button type="button" @click="closeOverlay()">Cancel</button>
@@ -32,44 +37,72 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
-import SleepTable from '@/components/ui/chart/SleepTable.vue';
-import chart from '@/components/ui/chart/SleepChart.vue';
-import { getUserId } from '@/auth';
+<script>
+import SleepTable from '@/components/ui/chart/SleepTable.vue'
+import chart from '@/components/ui/chart/SleepChart.vue'
+import { getUserId } from '@/auth'
 
-const sleepData = ref([]);
-const userId = getUserId();
-console.log(userId)
+export default {
+  components: {
+    SleepTable,
+    chart
+  },
 
-async function fetchSleepData() {
-  if (!userId) return;
-  const res = await fetch(`http://localhost:3000/sleepData?userId=${userId}`);
-  sleepData.value = await res.json();
-  console.log(sleepData.value);
-}
-async function openOverlay() {
-  document.getElementById("overlay").style.display = "block";
-}
+  data() {
+    return {
+      sleepData: [],
+      userId: getUserId(),
+      date: '',
+      bedTime: '',
+      wakeUpTime: '',
+      quality: null,
+      notes: ''
+    }
+  },
 
-async function closeOverlay() {
-  document.getElementById("overlay").style.display = "none";}
-onMounted(() => {
-  fetchSleepData();
-});
+  mounted() {
+    console.log(this.userId)
+    this.fetchSleepData()
+  },
 
-async function addSleepData(params) {
-  const res = await fetch(`http://localhost:3000/sleepData?userId=${userId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
+  methods: {
+    async fetchSleepData() {
+      if (!this.userId) return
+
+      const res = await fetch(
+        `http://localhost:3000/sleepData?userId=${this.userId}`
+      )
+      this.sleepData = await res.json()
+      console.log(this.sleepData)
     },
-    body: JSON.stringify(params)
-  });
-  const data = await res.json();
-  sleepData.value.push(data);
+
+    openOverlay() {
+      document.getElementById('overlay').style.display = 'block'
+    },
+
+    closeOverlay() {
+      document.getElementById('overlay').style.display = 'none'
+    },
+
+    async addSleepData(params) {
+      const res = await fetch(
+        `http://localhost:3000/sleepData?userId=${this.userId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(params)
+        }
+      )
+      const data = await res.json()
+      this.sleepData.push(data)
+      this.closeOverlay()
+    }
+  }
 }
 </script>
+
 <style scoped>
 /* Full-screen overlay */
 .overlay {

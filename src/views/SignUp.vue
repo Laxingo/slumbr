@@ -11,33 +11,37 @@
     </div>
 </template>
 
-<script setup>
-import { ref } from "vue";
-import { isAuthenticated,signUpUser } from "../auth.js";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-const email = ref("");
-const password = ref("");
-const username = ref("");
-const loggedIn = ref(isAuthenticated());
-
-function goLogin() {
-    router.push("/login");
-}
-
-async function handleSignup() {
-
-    const user = await signUpUser(email.value, password.value, username.value);
-
-    if (user) {
-        loggedIn.value = true;
-        alert(`Bem-vindo, ${user.userName}!`);
-    } else {
-        alert("Email ou senha inválidos!");
+<script>
+import { isAuthenticated, signUpUser } from '../auth.js'
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+      username: '',
+      loggedIn: isAuthenticated()
     }
+  },
+  methods: {
+    goLogin() {
+      this.$router.push('/login')
+    },
+    async handleSignup() {
+      const user = await signUpUser(
+        this.email,
+        this.password,
+        this.username
+      )
+      if (user) {
+        this.loggedIn = true
+        alert(`Bem-vindo, ${user.userName}!`)
+      } else {
+        alert('Email ou senha inválidos!')
+      }
+    }
+  }
 }
-
 </script>
+
 
 <style lang="scss" scoped></style>
