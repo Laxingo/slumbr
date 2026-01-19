@@ -1,128 +1,133 @@
-<!-- src/views/DashboardView.vue -->
 <template>
-  <div class="dash">
-    <div class="dash_top">
-      <div>
-        <h1 class="dash_title">My Sleep Dashboard</h1>
-        <p class="dash_subtitle">Log your sleep and track trends over time.</p>
+  <div class="home">
+    <AppHeader />
+
+    <main class="container dash">
+      <div class="dash_top">
+        <div>
+          <h1 class="dash_title">My Sleep Dashboard</h1>
+          <p class="dash_subtitle">Log your sleep and track trends over time.</p>
+        </div>
+
+        <button class="btn btn-primary" type="button" @click="isModalOpen = true">
+          + Add
+        </button>
       </div>
 
-      <button class="btn btn-primary" type="button" @click="isModalOpen = true">
-        + Add
-      </button>
-    </div>
-
-    <div class="dash_layout">
-      <section class="dash_left">
-        <div class="dash_card">
-          <UserPanel :metrics="panelMetrics" />
-        </div>
-
-        <div class="dash_card">
-          <div class="dash_card_top">
-            <h2 class="dash_card_title">Trends</h2>
+      <div class="dash_layout">
+        <section class="dash_left">
+          <div class="dash_card">
+            <UserPanel :metrics="panelMetrics" />
           </div>
 
-          <div class="chart_wrap">
-            <SleepChart :sleepData="filteredSleepData" />
-          </div>
-        </div>
-      </section>
+          <div class="dash_card">
+            <div class="dash_card_top">
+              <h2 class="dash_card_title">Trends</h2>
+            </div>
 
-
-      <aside class="dash_right">
-        <div class="dash_card">
-          <div class="dash_card_top">
-            <h2 class="dash_card_title">Logs</h2>
-
-            <div class="dash_controls">
-              <label class="dash_select">
-                <span>Show</span>
-                <select v-model.number="limit">
-                  <option :value="7">Last 7</option>
-                  <option :value="14">Last 14</option>
-                  <option :value="30">Last 30</option>
-                  <option :value="0">All</option>
-                </select>
-              </label>
+            <div class="chart_wrap">
+              <SleepChart :sleepData="filteredSleepData" />
             </div>
           </div>
+        </section>
 
-          <div class="table_wrap">
-            <SleepTable :sleepData="filteredSleepData" @edit="openEdit" @delete="deleteLog" />
+        <aside class="dash_right">
+          <div class="dash_card">
+            <div class="dash_card_top">
+              <h2 class="dash_card_title">Logs</h2>
+
+              <div class="dash_controls">
+                <label class="dash_select">
+                  <span>Show</span>
+                  <select v-model.number="limit">
+                    <option :value="7">Last 7</option>
+                    <option :value="14">Last 14</option>
+                    <option :value="30">Last 30</option>
+                    <option :value="0">All</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="table_wrap">
+              <SleepTable
+                :sleepData="filteredSleepData"
+                @edit="openEdit"
+                @delete="deleteLog"
+              />
+            </div>
           </div>
-        </div>
-      </aside>
-    </div>
-
-    <!-- Modal -->
-    <div v-if="isModalOpen" class="overlay" @click.self="closeModal">
-      <div class="modal">
-        <div class="modal_top">
-          <h2 class="modal_title">Add Sleep Data</h2>
-          <button class="modal_close" type="button" @click="closeModal">×</button>
-        </div>
-
-        <form class="form" @submit.prevent="submit">
-          <label class="field">
-            <span class="field_label">Date</span>
-            <input class="input" type="date" required v-model="date" />
-          </label>
-
-          <label class="field">
-            <span class="field_label">Bed time</span>
-            <input class="input" type="datetime-local" required v-model="bedTime" />
-          </label>
-
-          <label class="field">
-            <span class="field_label">Wake up time</span>
-            <input class="input" type="datetime-local" required v-model="wakeUpTime" />
-          </label>
-
-          <label class="field">
-            <span class="field_label">Quality (1–5)</span>
-            <select class="input" v-model="quality" required>
-              <option value="" disabled>Select quality</option>
-              <option v-for="n in 5" :key="n" :value="n">{{ n }}</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field_label">Notes (optional)</span>
-            <textarea class="input textarea" v-model="notes" placeholder="Anything relevant..."></textarea>
-          </label>
-
-          <p v-if="error" class="form_error">{{ error }}</p>
-
-          <div class="form_actions">
-            <button class="btn btn-secondary" type="button" @click="closeModal">
-              Cancel
-            </button>
-            <button class="btn btn-primary" type="submit" :disabled="loading">
-              {{ loading ? 'Saving...' : 'Add' }}
-            </button>
-          </div>
-        </form>
+        </aside>
       </div>
-    </div>
+
+      <!-- Modal -->
+      <div v-if="isModalOpen" class="overlay" @click.self="closeModal">
+        <div class="modal">
+          <div class="modal_top">
+            <h2 class="modal_title">{{ editingId ? 'Edit Sleep Log' : 'Add Sleep Data' }}</h2>
+            <button class="modal_close" type="button" @click="closeModal">×</button>
+          </div>
+
+          <form class="form" @submit.prevent="submit">
+            <label class="field">
+              <span class="field_label">Date</span>
+              <input class="input" type="date" required v-model="date" />
+            </label>
+
+            <label class="field">
+              <span class="field_label">Bed time</span>
+              <input class="input" type="datetime-local" required v-model="bedTime" />
+            </label>
+
+            <label class="field">
+              <span class="field_label">Wake up time</span>
+              <input class="input" type="datetime-local" required v-model="wakeUpTime" />
+            </label>
+
+            <label class="field">
+              <span class="field_label">Quality (1–5)</span>
+              <select class="input" v-model="quality" required>
+                <option value="" disabled>Select quality</option>
+                <option v-for="n in 5" :key="n" :value="n">{{ n }}</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span class="field_label">Notes (optional)</span>
+              <textarea class="input textarea" v-model="notes" placeholder="Anything relevant..."></textarea>
+            </label>
+
+            <p v-if="error" class="form_error">{{ error }}</p>
+
+            <div class="form_actions">
+              <button class="btn btn-secondary" type="button" @click="closeModal">
+                Cancel
+              </button>
+              <button class="btn btn-primary" type="submit" :disabled="loading">
+                {{ loading ? 'Saving...' : (editingId ? 'Save' : 'Add') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
   </div>
 </template>
 
 <script>
+import AppHeader from '@/components/ui/chart/layout/Header.vue'
 import SleepTable from '@/components/ui/chart/SleepTable.vue'
 import SleepChart from '@/components/ui/chart/SleepChart.vue'
 import { useAuthStore } from '@/stores/auth'
 import UserPanel from '@/components/ui/chart/UserPanel.vue'
 
-
 export default {
-  components: { SleepTable, SleepChart, UserPanel },
+  components: { AppHeader, SleepTable, SleepChart, UserPanel },
 
   data() {
     return {
       sleepData: [],
       editingId: null,
-
 
       // UI
       limit: 14,
@@ -136,7 +141,6 @@ export default {
       wakeUpTime: '',
       quality: '',
       notes: ''
-
     }
   },
 
@@ -157,7 +161,7 @@ export default {
         .filter(x => x?.userId === this.userId)
         .sort((a, b) => (b.date || 0) - (a.date || 0))
 
-      const sample = data.slice(0, 7) // "this week" visualmente
+      const sample = data.slice(0, 7)
       const n = sample.length
 
       if (!n) {
@@ -168,7 +172,7 @@ export default {
           regularityLabel: '-',
           durationScore: 0,
           qualityScore: 0,
-          regularityScore: 0,
+          regularityScore: 0
         }
       }
 
@@ -178,14 +182,13 @@ export default {
       const avgDuration = durations.reduce((a, b) => a + b, 0) / durations.length
       const avgQuality = qualities.length ? qualities.reduce((a, b) => a + b, 0) / qualities.length : 0
 
-      // Regularity: desvio padrão do horário de deitar (quanto menor, melhor)
       const bedTimes = sample.map(x => new Date(x.bedTime || 0)).filter(d => !isNaN(d))
       const bedMinutes = bedTimes.map(d => d.getHours() * 60 + d.getMinutes())
 
-      const regularityStd = stdDev(bedMinutes) // minutos
-      const regularityScore = clamp(100 - (regularityStd / 90) * 100, 0, 100) // 90min std => 0
+      const regularityStd = stdDev(bedMinutes)
+      const regularityScore = clamp(100 - (regularityStd / 90) * 100, 0, 100)
 
-      const durationScore = clamp((avgDuration / 8) * 100, 0, 100) // 8h como target
+      const durationScore = clamp((avgDuration / 8) * 100, 0, 100)
       const qualityScore = clamp((avgQuality / 5) * 100, 0, 100)
 
       return {
@@ -195,7 +198,7 @@ export default {
         regularityLabel: labelFromScore(regularityScore),
         durationScore: Math.round(durationScore),
         qualityScore: Math.round(qualityScore),
-        regularityScore: Math.round(regularityScore),
+        regularityScore: Math.round(regularityScore)
       }
 
       function fmtDuration(ms) {
@@ -228,7 +231,6 @@ export default {
         return 'Low'
       }
     }
-
   },
 
   mounted() {
@@ -245,6 +247,8 @@ export default {
     closeModal() {
       this.isModalOpen = false
       this.error = ''
+      this.editingId = null
+      this.loading = false
     },
 
     async submit() {
@@ -271,7 +275,6 @@ export default {
 
       this.loading = true
       try {
-        // EDIT
         if (this.editingId) {
           const res = await fetch(`http://localhost:3000/sleepData/${this.editingId}`, {
             method: 'PATCH',
@@ -285,7 +288,6 @@ export default {
           return
         }
 
-        // CREATE
         const res = await fetch(`http://localhost:3000/sleepData`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -303,12 +305,10 @@ export default {
     },
 
     openEdit(row) {
-      // abre modal em modo edição
       this.editingId = row.id
       this.isModalOpen = true
       this.error = ''
 
-      // preencher inputs com base no row
       this.date = row.date ? new Date(row.date).toISOString().slice(0, 10) : ''
       this.bedTime = row.bedTime ? new Date(row.bedTime).toISOString().slice(0, 16) : ''
       this.wakeUpTime = row.wakeUpTime ? new Date(row.wakeUpTime).toISOString().slice(0, 16) : ''
@@ -321,27 +321,15 @@ export default {
       const ok = confirm('Delete this log?')
       if (!ok) return
 
-      await fetch(`http://localhost:3000/sleepData/${row.id}`, {
-        method: 'DELETE'
-      })
-
+      await fetch(`http://localhost:3000/sleepData/${row.id}`, { method: 'DELETE' })
       this.sleepData = this.sleepData.filter((x) => x.id !== row.id)
-    },
-
-    closeModal() {
-      this.isModalOpen = false
-      this.error = ''
-      this.editingId = null
-    },
-
-
+    }
   }
 }
 </script>
 
 <style scoped>
 .dash {
-  min-height: 100vh;
   padding: 26px 0 60px;
   color: var(--text);
 }
@@ -358,7 +346,6 @@ export default {
   display: grid;
   gap: 14px;
 }
-
 
 .dash_title {
   margin: 0;
@@ -424,14 +411,12 @@ export default {
   outline: none;
 }
 
-/* Chart sizing */
 .chart_wrap {
   height: 340px;
   max-height: 340px;
   overflow: hidden;
 }
 
-/* Table sizing */
 .table_wrap {
   max-height: 520px;
   overflow-y: auto;
@@ -451,7 +436,6 @@ export default {
   background: rgba(212, 177, 106, 0.22);
 }
 
-/* Modal */
 .overlay {
   position: fixed;
   inset: 0;
@@ -553,7 +537,6 @@ export default {
   margin-top: 6px;
 }
 
-/* Responsive */
 @media (max-width: 980px) {
   .dash_layout {
     grid-template-columns: 1fr;
