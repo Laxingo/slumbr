@@ -191,10 +191,10 @@
     {
       "id": "e0a2",
       "userId": "e0be",
-      "date": 1768867200000,
-      "bedTime": 1768867200000,
-      "wakeUpTime": 1768894200000,
-      "duration": 27000000,
+      "date": 1769126400000,
+      "bedTime": 1769211000000,
+      "wakeUpTime": 1769239800000,
+      "duration": 28800000,
       "quality": 4,
       "notes": ""
     },
@@ -206,6 +206,66 @@
       "wakeUpTime": 1768980600000,
       "duration": 28800000,
       "quality": 4,
+      "notes": ""
+    },
+    {
+      "id": "5e39",
+      "userId": "e0be",
+      "date": 1768953600000,
+      "bedTime": 1769038200000,
+      "wakeUpTime": 1769067000000,
+      "duration": 28800000,
+      "quality": 4,
+      "notes": ""
+    },
+    {
+      "id": "5bdb",
+      "userId": "e0be",
+      "date": 1769040000000,
+      "bedTime": 1769124600000,
+      "wakeUpTime": 1769153400000,
+      "duration": 28800000,
+      "quality": 3,
+      "notes": ""
+    },
+    {
+      "id": "d4a5",
+      "userId": "e0be",
+      "date": 1769212800000,
+      "bedTime": 1769297400000,
+      "wakeUpTime": 1769329800000,
+      "duration": 32400000,
+      "quality": 4,
+      "notes": ""
+    },
+    {
+      "id": "7627",
+      "userId": "e0be",
+      "date": 1769472000000,
+      "bedTime": 1769556600000,
+      "wakeUpTime": 1769585400000,
+      "duration": 28800000,
+      "quality": 4,
+      "notes": ""
+    },
+    {
+      "id": "a135",
+      "userId": "e0be",
+      "date": 1769299200000,
+      "bedTime": 1769385000000,
+      "wakeUpTime": 1769409000000,
+      "duration": 24000000,
+      "quality": 1,
+      "notes": ""
+    },
+    {
+      "id": "b1d9",
+      "userId": "e0be",
+      "date": 1769385600000,
+      "bedTime": 1769463000000,
+      "wakeUpTime": 1769493600000,
+      "duration": 30600000,
+      "quality": 3,
       "notes": ""
     }
   ],

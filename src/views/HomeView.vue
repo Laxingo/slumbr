@@ -129,10 +129,6 @@ function doLogout() {
                   <div class="stat_value">4 / 5</div>
                 </div>
 
-                <div class="stat">
-                  <div class="stat_label">Avg. continuity</div>
-                  <div class="stat_value">Good</div>
-                </div>
               </div>
 
               <div class="panel_progress">
@@ -157,12 +153,6 @@ function doLogout() {
                   </div>
                 </div>
 
-                <div class="progress">
-                  <div class="progress_label">Continuity</div>
-                  <div class="progress_bar">
-                    <span style="width: 70%"></span>
-                  </div>
-                </div>
               </div>
 
               <div class="panel_hint">

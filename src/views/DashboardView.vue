@@ -15,6 +15,10 @@
     <div class="dash_layout">
       <section class="dash_left">
         <div class="dash_card">
+          <UserPanel :metrics="panelMetrics" />
+        </div>
+
+        <div class="dash_card">
           <div class="dash_card_top">
             <h2 class="dash_card_title">Trends</h2>
           </div>
@@ -24,6 +28,7 @@
           </div>
         </div>
       </section>
+
 
       <aside class="dash_right">
         <div class="dash_card">
@@ -107,9 +112,11 @@
 import SleepTable from '@/components/ui/chart/SleepTable.vue'
 import SleepChart from '@/components/ui/chart/SleepChart.vue'
 import { useAuthStore } from '@/stores/auth'
+import UserPanel from '@/components/ui/chart/UserPanel.vue'
+
 
 export default {
-  components: { SleepTable, SleepChart },
+  components: { SleepTable, SleepChart, UserPanel },
 
   data() {
     return {
@@ -143,7 +150,85 @@ export default {
       const sorted = [...this.sleepData].sort((a, b) => (b.date || 0) - (a.date || 0))
       if (this.limit === 0) return sorted
       return sorted.slice(0, this.limit)
+    },
+
+    panelMetrics() {
+      const data = [...this.sleepData]
+        .filter(x => x?.userId === this.userId)
+        .sort((a, b) => (b.date || 0) - (a.date || 0))
+
+      const sample = data.slice(0, 7) // "this week" visualmente
+      const n = sample.length
+
+      if (!n) {
+        return {
+          sampleSize: 0,
+          avgDurationText: '-',
+          avgQualityText: '-',
+          regularityLabel: '-',
+          durationScore: 0,
+          qualityScore: 0,
+          regularityScore: 0,
+        }
+      }
+
+      const durations = sample.map(x => Number(x.duration || 0)).filter(v => v > 0)
+      const qualities = sample.map(x => Number(x.quality || 0)).filter(v => v > 0)
+
+      const avgDuration = durations.reduce((a, b) => a + b, 0) / durations.length
+      const avgQuality = qualities.length ? qualities.reduce((a, b) => a + b, 0) / qualities.length : 0
+
+      // Regularity: desvio padrão do horário de deitar (quanto menor, melhor)
+      const bedTimes = sample.map(x => new Date(x.bedTime || 0)).filter(d => !isNaN(d))
+      const bedMinutes = bedTimes.map(d => d.getHours() * 60 + d.getMinutes())
+
+      const regularityStd = stdDev(bedMinutes) // minutos
+      const regularityScore = clamp(100 - (regularityStd / 90) * 100, 0, 100) // 90min std => 0
+
+      const durationScore = clamp((avgDuration / 8) * 100, 0, 100) // 8h como target
+      const qualityScore = clamp((avgQuality / 5) * 100, 0, 100)
+
+      return {
+        sampleSize: n,
+        avgDurationText: fmtDuration(avgDuration),
+        avgQualityText: avgQuality ? `${avgQuality.toFixed(1)} / 5` : '-',
+        regularityLabel: labelFromScore(regularityScore),
+        durationScore: Math.round(durationScore),
+        qualityScore: Math.round(qualityScore),
+        regularityScore: Math.round(regularityScore),
+      }
+
+      function fmtDuration(ms) {
+        const totalMin = Math.round(ms / 60000)
+        const h = Math.floor(totalMin / 60)
+        const m = totalMin % 60
+        return `${h}h ${String(m).padStart(2, '0')}m`
+      }
+
+      function clamp(v, min, max) {
+        return Math.max(min, Math.min(max, v))
+      }
+
+      function mean(arr) {
+        if (!arr.length) return 0
+        return arr.reduce((a, b) => a + b, 0) / arr.length
+      }
+
+      function stdDev(arr) {
+        if (!arr.length) return 0
+        const m = mean(arr)
+        const v = mean(arr.map(x => (x - m) ** 2))
+        return Math.sqrt(v)
+      }
+
+      function labelFromScore(score) {
+        if (score >= 80) return 'High'
+        if (score >= 55) return 'Good'
+        if (score >= 35) return 'Moderate'
+        return 'Low'
+      }
     }
+
   },
 
   mounted() {
@@ -268,6 +353,12 @@ export default {
   gap: 14px;
   margin-bottom: 18px;
 }
+
+.dash_left {
+  display: grid;
+  gap: 14px;
+}
+
 
 .dash_title {
   margin: 0;
