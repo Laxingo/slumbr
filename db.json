@@ -177,6 +177,36 @@
       "duration": 46920000,
       "quality": 5,
       "notes": ""
+    },
+    {
+      "id": "aaad",
+      "userId": "e0be",
+      "date": 1768780800000,
+      "bedTime": 1768783800000,
+      "wakeUpTime": 1768809600000,
+      "duration": 25800000,
+      "quality": 3,
+      "notes": "I had nightmares and woke up"
+    },
+    {
+      "id": "e0a2",
+      "userId": "e0be",
+      "date": 1768867200000,
+      "bedTime": 1768867200000,
+      "wakeUpTime": 1768894200000,
+      "duration": 27000000,
+      "quality": 4,
+      "notes": ""
+    },
+    {
+      "id": "ffb5",
+      "userId": "e0be",
+      "date": 1768867200000,
+      "bedTime": 1768951800000,
+      "wakeUpTime": 1768980600000,
+      "duration": 28800000,
+      "quality": 4,
+      "notes": ""
     }
   ],
   "quests": [
