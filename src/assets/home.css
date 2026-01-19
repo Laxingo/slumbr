@@ -523,19 +523,15 @@ body {
 }
 
 .auth_grid {
-  display: grid;
-  grid-template-columns: 1fr 0.9fr;
-  gap: 18px;
-  align-items: stretch;
+  display: flex;
+  justify-content: center;
 }
 
 .auth_panel {
-  border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  padding: 18px;
+  width: 100%;
+  max-width: 420px;
 }
+
 
 .auth_head {
   margin-bottom: 14px;
@@ -580,7 +576,7 @@ body {
 }
 
 .input::placeholder {
-  color: rgba(255,255,255,0.35);
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .input:focus {
@@ -629,4 +625,3 @@ body {
     grid-template-columns: 1fr;
   }
 }
-

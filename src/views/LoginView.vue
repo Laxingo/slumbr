@@ -34,22 +34,19 @@ async function handleLogin() {
 
 <template>
   <div class="auth">
-<header class="topbar">
-  <div class="container topbar_inner">
-    <RouterLink to="/" class="brand">
-      <span class="brand_mark">Slumbr</span>
-      <span class="brand_tag">sleep tracking</span>
-    </RouterLink>
+    <header class="topbar">
+      <div class="container topbar_inner">
+        <RouterLink to="/" class="brand">
+          <span class="brand_mark">Slumbr</span>
+          <span class="brand_tag">sleep tracking</span>
+        </RouterLink>
 
-    <nav class="nav">
-      <RouterLink class="nav_link" to="/">Home</RouterLink>
-      <RouterLink class="nav_link" to="/signup">Sign up</RouterLink>
-
-      <div class="nav_actions">
+        <nav class="nav">
+          <RouterLink class="nav_link" to="/">Home</RouterLink>
+          <RouterLink class="nav_link" to="/signup">Sign up</RouterLink>
+        </nav>
       </div>
-    </nav>
-  </div>
-</header>
+    </header>
 
 
     <main class="auth_main">
@@ -63,26 +60,14 @@ async function handleLogin() {
           <form class="auth_form" @submit.prevent="handleLogin">
             <label class="field">
               <span class="field_label">Email</span>
-              <input
-                class="input"
-                type="email"
-                v-model="email"
-                placeholder="you@example.com"
-                autocomplete="email"
-                required
-              />
+              <input class="input" type="email" v-model="email" placeholder="you@example.com" autocomplete="email"
+                required />
             </label>
 
             <label class="field">
               <span class="field_label">Password</span>
-              <input
-                class="input"
-                type="password"
-                v-model="password"
-                placeholder="••••••••"
-                autocomplete="current-password"
-                required
-              />
+              <input class="input" type="password" v-model="password" placeholder="••••••••"
+                autocomplete="current-password" required />
             </label>
 
             <p v-if="error" class="auth_error">{{ error }}</p>
@@ -100,20 +85,20 @@ async function handleLogin() {
       </div>
     </main>
 
-<footer class="footer">
-  <div class="container footer_inner">
-    <div>
-      <div class="footer_brand">Slumbr</div>
-      <div class="footer_copy">© 2026 Slumbr. All rights reserved.</div>
-    </div>
+    <footer class="footer">
+      <div class="container footer_inner">
+        <div>
+          <div class="footer_brand">Slumbr</div>
+          <div class="footer_copy">© 2026 Slumbr. All rights reserved.</div>
+        </div>
 
-    <div class="footer_links">
-      <a href="#" class="footer_link">Privacy</a>
-      <a href="#" class="footer_link">Terms</a>
-      <a href="#" class="footer_link">Contact</a>
-    </div>
-  </div>
-</footer>
+        <div class="footer_links">
+          <a href="#" class="footer_link">Privacy</a>
+          <a href="#" class="footer_link">Terms</a>
+          <a href="#" class="footer_link">Contact</a>
+        </div>
+      </div>
+    </footer>
 
 
   </div>

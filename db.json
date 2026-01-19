@@ -96,6 +96,15 @@
       "password": "joao",
       "level": 1,
       "xp": 0
+    },
+    {
+      "id": "e0be",
+      "userName": "Laxingo",
+      "email": "goncalo@gmail.com",
+      "password": "123",
+      "level": 1,
+      "xp": 0,
+      "isAdmin": false
     }
   ],
   "sleepData": [
