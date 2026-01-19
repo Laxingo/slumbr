@@ -98,10 +98,17 @@
       "xp": 0
     },
     {
+<<<<<<< Updated upstream
       "id": "e0be",
       "userName": "Laxingo",
       "email": "goncalo@gmail.com",
       "password": "123",
+=======
+      "id": "1097",
+      "userName": "gigarigigarigugu",
+      "email": "gigarigigarigugu@gmail.com",
+      "password": "ola",
+>>>>>>> Stashed changes
       "level": 1,
       "xp": 0,
       "isAdmin": false
@@ -179,6 +186,7 @@
       "notes": ""
     },
     {
+<<<<<<< Updated upstream
       "id": "aaad",
       "userId": "e0be",
       "date": 1768780800000,
@@ -267,6 +275,16 @@
       "duration": 30600000,
       "quality": 3,
       "notes": ""
+=======
+      "id": "f8b0",
+      "userId": "1097",
+      "date": 1768089600000,
+      "bedTime": 1768095780000,
+      "wakeUpTime": 1768204800000,
+      "duration": 109020000,
+      "quality": 3,
+      "notes": "Não dormi o suficiente"
+>>>>>>> Stashed changes
     }
   ],
   "quests": [
