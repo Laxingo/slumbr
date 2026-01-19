@@ -505,3 +505,128 @@ body {
     font-size: 34px;
   }
 }
+
+
+
+
+/* Auth (Login / Sign up) */
+.auth {
+  min-height: 100vh;
+  background:
+    radial-gradient(800px 500px at 20% 10%, rgba(212, 177, 106, 0.10), transparent 60%),
+    radial-gradient(700px 450px at 85% 30%, rgba(212, 177, 106, 0.06), transparent 60%),
+    linear-gradient(180deg, #0f172a 0%, #0b1220 100%);
+}
+
+.auth_main {
+  padding: 40px 0 50px;
+}
+
+.auth_grid {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.auth_panel {
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.auth_head {
+  margin-bottom: 14px;
+}
+
+.auth_title {
+  margin: 0 0 6px;
+  font-size: 28px;
+  letter-spacing: -0.3px;
+}
+
+.auth_subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.auth_form {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field_label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.55);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 11px 12px;
+  outline: none;
+}
+
+.input::placeholder {
+  color: rgba(255,255,255,0.35);
+}
+
+.input:focus {
+  border-color: rgba(212, 177, 106, 0.35);
+  box-shadow: 0 0 0 4px rgba(212, 177, 106, 0.12);
+}
+
+.auth_submit {
+  width: 100%;
+}
+
+.auth_submit:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.auth_error {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(248, 113, 113, 0.95);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  background: rgba(248, 113, 113, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.auth_alt {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.auth_link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.auth_link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .auth_grid {
+    grid-template-columns: 1fr;
+  }
+}
+
