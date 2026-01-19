@@ -4,6 +4,7 @@ import DashboardView from './views/DashboardView.vue'
 import LoginView from './views/LoginView.vue'
 import SignUp from './views/SignUp.vue'
 import AdminView from './views/AdminView.vue'
+import ProfileView from './views/ProfileView.vue'
 
 import { useAuthStore } from './stores/auth'
 
@@ -12,7 +13,8 @@ const routes = [
   { path: '/login', component: LoginView, meta: { guestOnly: true } },
   { path: '/signup', component: SignUp, meta: { guestOnly: true } },
   { path: '/dashboard', component: DashboardView, meta: { requiresAuth: true } },
-  { path: '/admin', component: AdminView, meta: { requiresAuth: true, requiresAdmin: true } }
+  { path: '/admin', component: AdminView, meta: { requiresAuth: true, requiresAdmin: true } },
+  { path: '/profile', component: ProfileView, meta: { requiresAuth: true } }
 ]
 
 const router = createRouter({

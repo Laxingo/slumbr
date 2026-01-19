@@ -110,6 +110,9 @@
           </form>
         </div>
       </div>
+      <div>
+        <QuestList/>
+      </div>
     </main>
   </div>
 </template>
@@ -120,9 +123,11 @@ import SleepTable from '@/components/ui/chart/SleepTable.vue'
 import SleepChart from '@/components/ui/chart/SleepChart.vue'
 import { useAuthStore } from '@/stores/auth'
 import UserPanel from '@/components/ui/chart/UserPanel.vue'
+import QuestList from '@/components/ui/chart/QuestList.vue'
+
 
 export default {
-  components: { AppHeader, SleepTable, SleepChart, UserPanel },
+  components: { AppHeader, SleepTable, SleepChart, UserPanel,QuestList },
 
   data() {
     return {

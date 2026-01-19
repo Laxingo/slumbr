@@ -98,17 +98,10 @@
       "xp": 0
     },
     {
-<<<<<<< Updated upstream
       "id": "e0be",
       "userName": "Laxingo",
       "email": "goncalo@gmail.com",
       "password": "123",
-=======
-      "id": "1097",
-      "userName": "gigarigigarigugu",
-      "email": "gigarigigarigugu@gmail.com",
-      "password": "ola",
->>>>>>> Stashed changes
       "level": 1,
       "xp": 0,
       "isAdmin": false
@@ -186,7 +179,6 @@
       "notes": ""
     },
     {
-<<<<<<< Updated upstream
       "id": "aaad",
       "userId": "e0be",
       "date": 1768780800000,
@@ -275,53 +267,53 @@
       "duration": 30600000,
       "quality": 3,
       "notes": ""
-=======
-      "id": "f8b0",
-      "userId": "1097",
-      "date": 1768089600000,
-      "bedTime": 1768095780000,
-      "wakeUpTime": 1768204800000,
-      "duration": 109020000,
-      "quality": 3,
-      "notes": "Não dormi o suficiente"
->>>>>>> Stashed changes
+    },
+    {
+      "id": "ebe1",
+      "userId": "17c5",
+      "date": 1768694400000,
+      "bedTime": 1768786200000,
+      "wakeUpTime": 1768813200000,
+      "duration": 27000000,
+      "quality": 5,
+      "notes": "Quase impossivel sair da cama"
     }
   ],
   "quests": [
     {
-      "id": "q1",
+      "id": 1,
       "description": "Log your sleep data for 7 consecutive days",
       "xpReward": 100
     },
     {
-      "id": "q2",
+      "id": 2,
       "description": "Achieve an average sleep quality of 4 or higher over a week",
       "xpReward": 150
     },
     {
-      "id": "q3",
+      "id": 3,
       "description": "Sleep at least 8 hours for 5 nights in a week",
       "xpReward": 200
     }
   ],
   "userQuests": [
     {
-      "userId": "17c5",
-      "questId": "q1",
+      "userId": "dd9b",
+      "questId": 2,
       "progress": 3,
       "completed": false,
       "id": "4630"
     },
     {
-      "userId": "17c5",
-      "questId": "q2",
+      "userId": "dd9b",
+      "questId": 3,
       "progress": 5,
       "completed": false,
       "id": "dff5"
     },
     {
       "userId": "dd9b",
-      "questId": "q1",
+      "questId": 1,
       "progress": 7,
       "completed": true,
       "id": "3206"

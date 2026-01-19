@@ -4,23 +4,15 @@
       <thead>
         <tr>
           <th>Date</th>
-<<<<<<< Updated upstream
           <th>Bed</th>
           <th>Wake</th>
           <th>Duration</th>
           <th>Quality</th>
           <th class="col_actions">Actions</th>
-=======
-          <th>Notes</th>
-          <th>Sunset</th>
-          <th>Sunrise</th>
-          <th>Edit</th>
->>>>>>> Stashed changes
         </tr>
       </thead>
 
       <tbody>
-<<<<<<< Updated upstream
         <tr v-for="row in rows" :key="row.id">
           <td>{{ fmtDate(row.date) }}</td>
           <td>{{ fmtTime(row.bedTime) }}</td>
@@ -40,18 +32,6 @@
 
         <tr v-if="!rows.length">
           <td class="empty" colspan="6">No logs yet.</td>
-=======
-        <tr v-for="sleep in sleepData" :key="sleep.id">
-          <td>{{ formatTime(sleep.bedTime) }}</td>
-          <td>{{ formatTime(sleep.wakeUpTime) }}</td>
-          <td>{{ formatDuration(sleep.duration) }}</td>
-          <td>{{ sleep.quality }}/5</td>
-          <td>{{ formatDate(sleep.date) }}</td>
-          <td>{{ sleep.notes }}</td>
-          <td></td>
-          <td></td>
-          <td><button @click="editSleep(sleep.id)">Edit</button></td>
->>>>>>> Stashed changes
         </tr>
       </tbody>
     </table>
