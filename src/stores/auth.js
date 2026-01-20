@@ -84,37 +84,55 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async signUpUser(email, password, userName) {
-      if (!email || !password || !userName) return null;
+async signUpUser(email, password, userName) {
+  if (!email || !password || !userName) return null;
 
-      const checkRes = await fetch(
-        `${API_BASE}/users?email=${encodeURIComponent(email)}`,
-      );
-      if (!checkRes.ok) throw new Error("Falha a verificar email");
+  // Check if email already exists
+  const checkRes = await fetch(`${API_BASE}/users?email=${encodeURIComponent(email)}`);
+  if (!checkRes.ok) throw new Error("Falha a verificar email");
+  const existing = await checkRes.json();
+  if (existing.length) return null;
 
-      const existing = await checkRes.json();
-      if (existing.length) return null;
+  // Create new user
+  const newUser = { userName, email, password, level: 1, xp: 0, isAdmin: false };
+  const createRes = await fetch(`${API_BASE}/users`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newUser),
+  });
+  if (!createRes.ok) throw new Error("Falha a criar utilizador");
 
-      const newUser = {
-        userName,
-        email,
-        password,
-        level: 1,
-        xp: 0,
-        isAdmin: false,
-      };
+  const createdUser = await createRes.json();
+  const userId = createdUser.id;
 
-      const createRes = await fetch(`${API_BASE}/users`, {
+  // Assign quests safely
+  try {
+    const questList = await fetch(`${API_BASE}/quests`);
+    if (!questList.ok) throw new Error("Falha ao buscar quests");
+    const quests = await questList.json();
+
+    for (let i = 0; i < quests.length; i++) {
+      const newQuest = { userId, questId: i + 1, progress: 0, completed: false };
+      const questRes = await fetch(`${API_BASE}/userQuests`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify(newQuest),
       });
-      if (!createRes.ok) throw new Error("Falha a criar utilizador");
+      if (!questRes.ok) console.warn(`Failed to assign quest ${i + 1}`);
+    }
+  } catch (e) {
+    console.warn("Quest assignment failed, but user was created", e);
+  }
 
-      const createdUser = await createRes.json();
-      this.user = createdUser;
-      this.setToken(makeToken(createdUser));
-      return createdUser;
-    },
+  // Set user in store safely
+  this.user = createdUser;
+
+  try {
+    this.setToken(makeToken(createdUser));
+  } catch (e) {
+    console.warn("Failed to create token, but user was created", e);
+  }
+  return createdUser;
+}
   },
 });

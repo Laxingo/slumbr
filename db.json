@@ -26,70 +26,6 @@
       "xp": 20
     },
     {
-      "id": "a1f3",
-      "userName": "alex",
-      "email": "alex@example.com",
-      "password": "123",
-      "level": 1,
-      "xp": 0
-    },
-    {
-      "id": "b7c2",
-      "userName": "jordan",
-      "email": "jordan@example.com",
-      "password": "123",
-      "level": 2,
-      "xp": 150
-    },
-    {
-      "id": "c9d4",
-      "userName": "sam",
-      "email": "sam@example.com",
-      "password": "123",
-      "level": 3,
-      "xp": 420
-    },
-    {
-      "id": "d2e8",
-      "userName": "taylor",
-      "email": "taylor@example.com",
-      "password": "123",
-      "level": 1,
-      "xp": 20
-    },
-    {
-      "id": "e5a1",
-      "userName": "morgan",
-      "email": "morgan@example.com",
-      "password": "123",
-      "level": 4,
-      "xp": 980
-    },
-    {
-      "id": "f3b9",
-      "userName": "casey",
-      "email": "casey@example.com",
-      "password": "123",
-      "level": 2,
-      "xp": 210
-    },
-    {
-      "id": "g8c6",
-      "userName": "riley",
-      "email": "riley@example.com",
-      "password": "123",
-      "level": 5,
-      "xp": 1500
-    },
-    {
-      "id": "j9f5",
-      "userName": "chris",
-      "email": "chris@example.com",
-      "password": "123",
-      "level": 2,
-      "xp": 180
-    },
-    {
       "id": "3b34",
       "userName": "joao",
       "email": "joao@gmail.com",
@@ -281,22 +217,22 @@
   ],
   "quests": [
     {
-      "id": 1,
+      "id": "1",
       "description": "Log your sleep data for 7 consecutive days",
       "xpReward": 100,
       "goal": 7
     },
     {
-      "id": 2,
+      "id": "2",
       "description": "Achieve an average sleep quality of 4 or higher over a week",
       "xpReward": 150,
-      "goal":1
+      "goal": 1
     },
     {
-      "id": 3,
+      "id": "3",
       "description": "Sleep at least 8 hours for 5 nights in a week",
       "xpReward": 200,
-       "goal": 5
+      "goal": 5
     }
   ],
   "userQuests": [
@@ -320,6 +256,67 @@
       "progress": 7,
       "completed": true,
       "id": "3206"
+    },
+    {
+      "userId": "17c5",
+      "questId": "1",
+      "progress": 0,
+      "completed": false,
+      "id": "uq-17c5-1"
+    },
+    {
+      "userId": "17c5",
+      "questId": "2",
+      "progress": 0,
+      "completed": false,
+      "id": "uq-17c5-2"
+    },
+    {
+      "userId": "17c5",
+      "questId": "3",
+      "progress": 0,
+      "completed": false,
+      "id": "uq-17c5-3"
+    },    {
+      "userId": "3b34",
+      "questId": "1",
+      "progress": 0,
+      "completed": false,
+      "id": "uq-17c5-1"
+    },
+    {
+      "userId": "3b34",
+      "questId": "2",
+      "progress": 0,
+      "completed": false,
+      "id": "uq-17c5-2"
+    },
+    {
+      "userId": "3b34",
+      "questId": "3",
+      "progress": 0,
+      "completed": false,
+      "id": "uq-17c5-3"
+    },    {
+      "userId": "e0be",
+      "questId": "1",
+      "progress": 0,
+      "completed": false,
+      "id": "uq-17c5-1"
+    },
+    {
+      "userId": "e0be",
+      "questId": "2",
+      "progress": 0,
+      "completed": false,
+      "id": "uq-17c5-2"
+    },
+    {
+      "userId": "e0be",
+      "questId": "3",
+      "progress": 0,
+      "completed": false,
+      "id": "uq-17c5-3"
     }
   ]
 }
