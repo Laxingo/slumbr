@@ -1,36 +1,45 @@
-<script setup>
-import { ref } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
+<script>
 import { useAuthStore } from '@/stores/auth'
 
-const router = useRouter()
-const auth = useAuthStore()
-
-const email = ref('')
-const password = ref('')
-const error = ref('')
-const loading = ref(false)
-
-async function handleLogin() {
-  error.value = ''
-  loading.value = true
-
-  try {
-    const user = await auth.loginUser(email.value, password.value)
-
-    if (!user) {
-      error.value = 'Invalid email or password.'
-      return
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+      error: '',
+      loading: false
     }
+  },
+  methods: {
+    async handleLogin() {
+      this.error = ''
+      this.loading = true
+      const auth = useAuthStore()
+      const router = this.$router
 
-    router.push('/dashboard')
-  } catch (e) {
-    error.value = 'Login failed. Please try again.'
-  } finally {
-    loading.value = false
+      try {
+        const user = await auth.loginUser(this.email, this.password)
+
+        if (!user) {
+          this.error = 'Invalid email or password.'
+          return
+        }
+
+        if (user.isAdmin) {
+          router.push('/admin')
+        } else {
+          router.push('/dashboard')
+        }
+      } catch (e) {
+        this.error = 'Login failed. Please try again.'
+      } finally {
+        this.loading = false
+      }
+    }
   }
 }
 </script>
+
 
 <template>
   <div class="auth">

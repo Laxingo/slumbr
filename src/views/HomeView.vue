@@ -1,26 +1,32 @@
-<script setup>
-import { computed } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
+<script>
 import { useAuthStore } from '@/stores/auth'
 
-const router = useRouter()
-const auth = useAuthStore()
-
-const isAuthed = computed(() => auth.isAuthenticated)
-
-function goLogin() {
-  router.push('/login')
-}
-
-function goDashboard() {
-  router.push('/dashboard')
-}
-
-function doLogout() {
-  auth.logout()
-  router.push('/')
+export default {
+  data() {
+    return {}
+  },
+  computed: {
+    isAuthed() {
+      const auth = useAuthStore()
+      return auth.isAuthenticated
+    }
+  },
+  methods: {
+    goLogin() {
+      this.$router.push('/login')
+    },
+    goDashboard() {
+      this.$router.push('/dashboard')
+    },
+    doLogout() {
+      const auth = useAuthStore()
+      auth.logout()
+      this.$router.push('/')
+    }
+  }
 }
 </script>
+
 
 <template>
   <div class="home">

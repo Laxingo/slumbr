@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>User Management</h2>
-
+    <button @click="handleLogout">Logout</button>
     <table>
       <thead>
         <tr>
@@ -26,16 +26,33 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
+<script>
+import { useAuthStore } from '@/stores/auth'
 
-const users = ref([])
-
-onMounted(async () => {
-  const res = await fetch('http://localhost:3000/users')
-  users.value = await res.json()
-})
+export default {
+  data() {
+    return {
+      users: []
+    }
+  },
+  created() {
+    this.fetchUsers()
+  },
+  methods: {
+    async fetchUsers() {
+      const res = await fetch('http://localhost:3000/users')
+      this.users = await res.json()
+    },
+    handleLogout() {
+      const auth = useAuthStore()
+      auth.logout()
+      this.$router.push('/dashboard')
+    }
+  }
+}
 </script>
+
+
 
 <style scoped>
 table {
@@ -50,7 +67,7 @@ td {
 }
 
 th {
-  background: #f5f5f5;
+  background: #000000;
   text-align: left;
 }
 </style>
