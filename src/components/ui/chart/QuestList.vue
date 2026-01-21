@@ -13,8 +13,8 @@
             </thead>
 
             <tbody>
-                <tr v-for="quest in userQuests">
-                    <td>{{ this.questDetails.find(q => q.id === quest.questId)?.description }}</td>
+                <tr v-for="quest in userQuests" :key="quest.id">
+                    <td>{{ questDetails.find(q => q.id === quest.questId)?.description }}</td>
                     <td>{{ quest.progress }}</td>
                     <td>{{ quest.xpReward }}</td>
                     <td class="col_actions">
@@ -37,7 +37,6 @@ export default {
             questDetails: []
         }
     },
-
     methods: {
         async fetchUserQuests() {
             const response = await fetch(
@@ -50,14 +49,11 @@ export default {
             this.questDetails = await response.json()
         }
     },
-
     mounted() {
         this.fetchUserQuests()
         this.fetchQuestDetails()
     },
-
     computed: {
-    
         userId() {
             const auth = useAuthStore()
             return auth.userId

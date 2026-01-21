@@ -97,9 +97,9 @@
     {
       "id": "3f18",
       "userId": "dd9b",
-      "date": 1767571200000,
-      "bedTime": 1767644400000,
-      "wakeUpTime": 1767687720000,
+      "date": 1767657600000,
+      "bedTime": 1767730800000,
+      "wakeUpTime": 1767774120000,
       "duration": 43320000,
       "quality": 5,
       "notes": ""
@@ -108,8 +108,8 @@
       "id": "24cd",
       "userId": "dd9b",
       "date": 1767571200000,
-      "bedTime": 1767738000000,
-      "wakeUpTime": 1767784920000,
+      "bedTime": 1767651600000,
+      "wakeUpTime": 1767698520000,
       "duration": 46920000,
       "quality": 5,
       "notes": ""
@@ -217,19 +217,19 @@
   ],
   "quests": [
     {
-      "id": "1",
+      "id": 1,
       "description": "Log your sleep data for 7 consecutive days",
       "xpReward": 100,
       "goal": 7
     },
     {
-      "id": "2",
+      "id": 2,
       "description": "Achieve an average sleep quality of 4 or higher over a week",
       "xpReward": 150,
       "goal": 1
     },
     {
-      "id": "3",
+      "id": 3,
       "description": "Sleep at least 8 hours for 5 nights in a week",
       "xpReward": 200,
       "goal": 5
@@ -259,61 +259,63 @@
     },
     {
       "userId": "17c5",
-      "questId": "1",
+      "questId": 1,
       "progress": 0,
       "completed": false,
       "id": "uq-17c5-1"
     },
     {
       "userId": "17c5",
-      "questId": "2",
+      "questId": 2,
       "progress": 0,
       "completed": false,
       "id": "uq-17c5-2"
     },
     {
       "userId": "17c5",
-      "questId": "3",
+      "questId": 3,
       "progress": 0,
       "completed": false,
       "id": "uq-17c5-3"
-    },    {
+    },
+    {
       "userId": "3b34",
-      "questId": "1",
+      "questId": 1,
       "progress": 0,
       "completed": false,
       "id": "uq-17c5-1"
     },
     {
       "userId": "3b34",
-      "questId": "2",
+      "questId": 2,
       "progress": 0,
       "completed": false,
       "id": "uq-17c5-2"
     },
     {
       "userId": "3b34",
-      "questId": "3",
+      "questId": 3,
       "progress": 0,
       "completed": false,
       "id": "uq-17c5-3"
-    },    {
+    },
+    {
       "userId": "e0be",
-      "questId": "1",
+      "questId": 1,
       "progress": 0,
       "completed": false,
       "id": "uq-17c5-1"
     },
     {
       "userId": "e0be",
-      "questId": "2",
+      "questId": 2,
       "progress": 0,
       "completed": false,
       "id": "uq-17c5-2"
     },
     {
       "userId": "e0be",
-      "questId": "3",
+      "questId": 3,
       "progress": 0,
       "completed": false,
       "id": "uq-17c5-3"

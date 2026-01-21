@@ -5,6 +5,7 @@
     <main class="container dash">
       <div class="dash_top">
         <div>
+          <h1>Welcome, {{ userName }}!</h1>
           <h1 class="dash_title">My Sleep Dashboard</h1>
           <p class="dash_subtitle">Log your sleep and track trends over time.</p>
         </div>
@@ -133,7 +134,7 @@ export default {
     return {
       sleepData: [],
       editingId: null,
-
+      userName:"",
       // UI
       limit: 14,
       isModalOpen: false,
@@ -160,7 +161,7 @@ export default {
       if (this.limit === 0) return sorted
       return sorted.slice(0, this.limit)
     },
-
+    // WELCOME USER
     panelMetrics() {
       const data = [...this.sleepData]
         .filter(x => x?.userId === this.userId)
@@ -240,9 +241,16 @@ export default {
 
   mounted() {
     this.fetchSleepData()
+    this.welcomeUser()
   },
 
   methods: {
+    async welcomeUser() {
+      const res= await fetch(`http://localhost:3000/users?id=${this.userId}`)
+      this.data =await res.json()
+      this.userName=this.data[0].userName
+      
+    },
     async fetchSleepData() {
       if (!this.userId) return
       const res = await fetch(`http://localhost:3000/sleepData?userId=${this.userId}`)

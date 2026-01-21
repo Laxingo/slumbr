@@ -1,10 +1,16 @@
-<script setup lang="ts">
+<script lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
-
-const route = useRoute();
-const showHeader = computed(() => route.path !== '/');
+export default {
+  setup() {
+    const route = useRoute();
+    const showHeader = computed(() => route.path !== '/');
+    return {
+      showHeader,
+    };
+  },
+};
 </script>
 
 
@@ -12,5 +18,4 @@ const showHeader = computed(() => route.path !== '/');
   <router-view />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
