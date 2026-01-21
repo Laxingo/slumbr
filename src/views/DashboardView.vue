@@ -110,10 +110,23 @@
             </div>
           </form>
         </div>
+      </div >
+      <br>
+<aside class="dash_right">
+  <div class="dash_card">
+    <div class="dash_card_top">
+      <h2 class="dash_card_title">Quests</h2>
+
+      <div class="dash_controls">
       </div>
-      <div>
-        <QuestList/>
-      </div>
+    </div>
+
+    <div class="table_wrap">
+      <QuestList />
+    </div>
+  </div>
+</aside>
+
     </main>
   </div>
 </template>
