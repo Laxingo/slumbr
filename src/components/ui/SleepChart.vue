@@ -127,7 +127,7 @@ watch(() => props.sleepData, renderChart, { deep: true })
 <style scoped>
 .chart {
   width: 100%;
-  height: 100%; 
+  height: 100%;
 }
 
 canvas {

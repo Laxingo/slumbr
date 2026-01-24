@@ -29,7 +29,7 @@ function logout() {
         <span class="brand_tag">sleep tracking</span>
       </RouterLink>
 
-      <nav class="nav" v-if="$route.path=='/dashboard'"> 
+      <nav class="nav" v-if="$route.path !== '/dashboard'">
         <div class="nav_actions">
           <button class="btn btn-secondary" type="button" @click="goHome">
             Home
@@ -47,7 +47,7 @@ function logout() {
         </div>
       </nav>
 
-      <nav class="nav" v-if="$route.path!='/dashboard'">
+      <nav class="nav" v-if="$route.path == '/dashboard'">
         <div class="nav_actions">
           <button class="btn btn-ghost" type="button" @click="goHome">
             Home

@@ -94,7 +94,7 @@ async signUpUser(email, password, userName) {
   if (existing.length) return null;
 
   // Create new user
-  const newUser = { userName, email, password, level: 1, xp: 0, isAdmin: false };
+  const newUser = { userName, email, password, level: 1,location:{latitude:null,longitude:null}, xp: 0, isAdmin: false };
   const createRes = await fetch(`${API_BASE}/users`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

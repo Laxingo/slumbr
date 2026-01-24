@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <AppHeader />
-
+    <SunPosApi />
     <main class="container dash">
       <div class="dash_top">
         <div>
@@ -51,11 +51,7 @@
             </div>
 
             <div class="table_wrap">
-              <SleepTable
-                :sleepData="filteredSleepData"
-                @edit="openEdit"
-                @delete="deleteLog"
-              />
+              <SleepTable :sleepData="filteredSleepData" @edit="openEdit" @delete="deleteLog" />
             </div>
           </div>
         </aside>
@@ -110,22 +106,22 @@
             </div>
           </form>
         </div>
-      </div >
-      <br>
-<aside class="dash_right">
-  <div class="dash_card">
-    <div class="dash_card_top">
-      <h2 class="dash_card_title">Quests</h2>
-
-      <div class="dash_controls">
       </div>
-    </div>
+      <br>
+      <aside class="dash_right">
+        <div class="dash_card">
+          <div class="dash_card_top">
+            <h2 class="dash_card_title">Quests</h2>
 
-    <div class="table_wrap">
-      <QuestList />
-    </div>
-  </div>
-</aside>
+            <div class="dash_controls">
+            </div>
+          </div>
+
+          <div class="table_wrap">
+            <QuestList />
+          </div>
+        </div>
+      </aside>
 
     </main>
   </div>
@@ -138,16 +134,16 @@ import SleepChart from '@/components/ui/SleepChart.vue'
 import { useAuthStore } from '@/stores/auth'
 import UserPanel from '@/components/ui/UserPanel.vue'
 import QuestList from '@/components/ui/QuestList.vue'
-
+import SunPosApi from '@/components/Api/SunPosApi.vue'
 
 export default {
-  components: { AppHeader, SleepTable, SleepChart, UserPanel,QuestList },
+  components: { AppHeader, SleepTable, SleepChart, UserPanel, QuestList, SunPosApi },
 
   data() {
     return {
       sleepData: [],
       editingId: null,
-      userName:"",
+      userName: "",
       // UI
       limit: 14,
       isModalOpen: false,
@@ -259,11 +255,11 @@ export default {
 
   methods: {
     async welcomeUser() {
-      const res= await fetch(`http://localhost:3000/users?id=${this.userId}`)
-      this.data =await res.json()
-      this.userName=this.data[0].userName
+      const res = await fetch(`http://localhost:3000/users?id=${this.userId}`)
+      this.data = await res.json()
+      this.userName = this.data[0].userName
 
-      
+
     },
     async fetchSleepData() {
       if (!this.userId) return
