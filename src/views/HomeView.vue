@@ -1,7 +1,8 @@
 <script>
 import { useAuthStore } from '@/stores/auth'
-
+import AppHeader from '@/components/ui/Header.vue'
 export default {
+  components: { AppHeader },
   data() {
     return {}
   },
@@ -30,36 +31,8 @@ export default {
 
 <template>
   <div class="home">
+    <AppHeader />
 
-
-    <!-- Header / Nav -->
-    <header class="topbar">
-      <div class="container topbar_inner">
-        <RouterLink to="/" class="brand">
-          <span class="brand_mark">Slumbr</span>
-          <span class="brand_tag">sleep tracking</span>
-        </RouterLink>
-
-        <nav class="nav">
-          <a class="nav_link" href="#features">Features</a>
-          <a class="nav_link" href="#how">How it works</a>
-
-          <div class="nav_actions">
-            <button v-if="isAuthed" class="btn btn-secondary" type="button" @click="goDashboard">
-              Dashboard
-            </button>
-
-            <button v-if="!isAuthed" class="btn btn-primary" type="button" @click="goLogin">
-              Login
-            </button>
-
-            <button v-else class="btn btn-ghost" type="button" @click="doLogout">
-              Logout
-            </button>
-          </div>
-        </nav>
-      </div>
-    </header>
 
     <!-- Hero -->
     <main>

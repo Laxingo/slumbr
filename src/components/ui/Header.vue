@@ -11,6 +11,9 @@ const isAuthed = computed(() => auth.isAuthenticated)
 function goDashboard() {
   router.push('/dashboard')
 }
+function goHome() {
+  router.push('/')
+}
 
 function logout() {
   auth.logout()
@@ -26,9 +29,30 @@ function logout() {
         <span class="brand_tag">sleep tracking</span>
       </RouterLink>
 
-      <nav class="nav">
-        <RouterLink class="nav_link" to="/">Home</RouterLink>
+      <nav class="nav" v-if="$route.path=='/dashboard'"> 
+        <div class="nav_actions">
+          <button class="btn btn-secondary" type="button" @click="goHome">
+            Home
+          </button>
+        </div>
 
+        <div class="nav_actions" v-if="isAuthed">
+          <button class="btn btn-ghost" type="button" @click="goDashboard">
+            Dashboard
+          </button>
+
+          <button class="btn btn-ghost" type="button" @click="logout">
+            Logout
+          </button>
+        </div>
+      </nav>
+
+      <nav class="nav" v-if="$route.path!='/dashboard'">
+        <div class="nav_actions">
+          <button class="btn btn-ghost" type="button" @click="goHome">
+            Home
+          </button>
+        </div>
         <div class="nav_actions" v-if="isAuthed">
           <button class="btn btn-secondary" type="button" @click="goDashboard">
             Dashboard

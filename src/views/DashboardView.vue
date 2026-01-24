@@ -132,12 +132,12 @@
 </template>
 
 <script>
-import AppHeader from '@/components/ui/chart/layout/Header.vue'
-import SleepTable from '@/components/ui/chart/SleepTable.vue'
-import SleepChart from '@/components/ui/chart/SleepChart.vue'
+import AppHeader from '@/components/ui/Header.vue'
+import SleepTable from '@/components/ui/SleepTable.vue'
+import SleepChart from '@/components/ui/SleepChart.vue'
 import { useAuthStore } from '@/stores/auth'
-import UserPanel from '@/components/ui/chart/UserPanel.vue'
-import QuestList from '@/components/ui/chart/QuestList.vue'
+import UserPanel from '@/components/ui/UserPanel.vue'
+import QuestList from '@/components/ui/QuestList.vue'
 
 
 export default {
@@ -262,6 +262,7 @@ export default {
       const res= await fetch(`http://localhost:3000/users?id=${this.userId}`)
       this.data =await res.json()
       this.userName=this.data[0].userName
+
       
     },
     async fetchSleepData() {
