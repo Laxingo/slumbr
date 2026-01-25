@@ -115,12 +115,12 @@
       "userName": "toni",
       "email": "toni@gmail.com",
       "password": "123",
-      "level": 1,
+      "level": 2,
       "location": {
         "latitude": 41.19569364048433,
         "longitude": -8.576968286844988
       },
-      "xp": 100,
+      "xp": 250,
       "isAdmin": false
     }
   ],
@@ -641,9 +641,9 @@
       "id": "ba72",
       "userId": "1f22",
       "questId": 2,
-      "progress": 0,
-      "completed": false,
-      "claimed": false
+      "progress": 7,
+      "completed": true,
+      "claimed": true
     },
     {
       "id": "8da0",
