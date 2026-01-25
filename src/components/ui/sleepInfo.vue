@@ -63,7 +63,8 @@
             </thead>
 
             <tbody>
-                <tr v-for="row in rows" :key="row.id">
+                <tr v-for="row in rows" :key="row.id"
+                    @click="fetchSunriseSunset(row.date, this.location.latitude, this.location.longitude)">
                     <td>{{ fmtDate(row.date) }}</td>
                     <td>{{ fmtTime(row.bedTime) }}</td>
                     <td>{{ fmtTime(row.wakeUpTime) }}</td>
@@ -89,8 +90,20 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth'
 export default {
-    name: 'SleepTable',
+    name: 'SleepInfo',
+    data() {
+        return {
+            Sunset: null,
+            Sunrise: null,
+            location: {
+                latitude: null,
+                longitude: null
+            },
+            userData: {}
+        }
+    },
     props: {
         sleepData: {
             type: Array,
@@ -99,16 +112,70 @@ export default {
         metrics: {
             type: Object,
             required: true
+        }, cords: {
+            type: Object,
+            required: false
         }
     },
 
     computed: {
+        userId() {
+            const auth = useAuthStore()
+            return auth.userId
+        },
         rows() {
             return [...this.sleepData].sort((a, b) => (b.date || 0) - (a.date || 0))
         }
     },
 
     methods: {
+        async fetchLocation() {
+            const response = await fetch(`http://localhost:3000/users?id=${this.userId}`)
+            this.userData = await response.json()
+            if (this.userData[0].location.latitude == null && this.userData[0].location.longitude == null) {
+                console.log("No location set")
+                return
+            }
+            this.location = this.userData[0].location
+            console.log(this.location)
+        },
+        // Quando n existe ao clicar no botão para obter a localização busca e da update da localização na base de dados
+        async getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    this.location.latitude = position.coords.latitude
+                    this.location.longitude = position.coords.longitude
+                    console.log(this.location)
+                    // Update user location in the database
+                    fetch(`http://localhost:3000/users/${this.userId}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            location: this.location
+                        })
+                    })
+                })
+            } else {
+                console.error("Geolocation is not supported by this browser.")
+            }
+        },
+        // com isto da para buscar a posição do sol no lugar e com o atributo de data da para saber a posição do sol em dias diferentes
+        async fetchSunPosition() {
+            console.log("Fetching sun position for date:", date);
+            const response = await fetch(`https://api.sunrise-sunset.org/json?lat=${Number(this.location.latitude)}&lng=${Number(this.location.longitude)}&date=${date}&formatted=0`)
+            const data = await response.json()
+            return data.results
+        },
+        async fetchSunriseSunset(date, latitude, longitude) {
+            const formattedDate = new Date(date).toISOString().split('T')[0];
+            const response = await fetch(`https://api.sunrise-sunset.org/json?lat=${Number(latitude)}&lng=${Number(longitude)}&date=${formattedDate}&formatted=0`)
+            const data = await response.json();
+            this.sunrise = data.results.sunrise;
+            this.sunset = data.results.sunset;
+            console.log("Sunrise:", this.sunrise, "Sunset:", this.sunset);
+        },
         fmtDate(ms) {
             if (!ms) return '-'
             const d = new Date(ms)
@@ -128,6 +195,8 @@ export default {
             const m = totalMin % 60
             return `${h}h ${String(m).padStart(2, '0')}m`
         }
+    },mounted() {
+        this.fetchLocation()
     }
 }
 
