@@ -10,19 +10,23 @@
 
         <div class="panel_stats">
             <div class="stat">
-                <div class="stat_label">Avg. duration</div>
-                <div class="stat_value">{{ metrics.avgDurationText }}</div>
+                <div class="stat_label">Sleep Duration</div>
+                <div class="stat_value">{{ fmtDuration(dayInfo.duration) }}</div>
             </div>
 
             <div class="stat">
-                <div class="stat_label">Avg. regularity</div>
-                <div class="stat_value">{{ metrics.regularityLabel }}</div>
+                <div class="stat_label">Sunset</div>
+                <div class="stat_value">{{ this.sunset }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat_label">Quality</div>
+                <div class="stat_value">{{ dayInfo.quality }}</div>
+            </div>
+            <div class="stat">
+                <div class="stat_label">Sunrise</div>
+                <div class="stat_value">{{ this.sunrise }}</div>
             </div>
 
-            <div class="stat">
-                <div class="stat_label">Avg. quality</div>
-                <div class="stat_value">{{ metrics.avgQualityText }}</div>
-            </div>
 
         </div>
 
@@ -110,7 +114,7 @@
 
             <tbody>
                 <tr v-for="row in rows" :key="row.id"
-                    @click="fetchSunriseSunset(row.date, this.location.latitude, this.location.longitude,row.id)">
+                    @click="fetchSunriseSunset(row.date, this.location.latitude, this.location.longitude, row.id)">
                     <td>{{ fmtDate(row.date) }}</td>
                     <td>{{ fmtTime(row.bedTime) }}</td>
                     <td>{{ fmtTime(row.wakeUpTime) }}</td>
@@ -216,12 +220,12 @@ export default {
             const data = await response.json()
             return data.results
         },
-        async fetchSunriseSunset(date, latitude, longitude,id) {
+        async fetchSunriseSunset(date, latitude, longitude, id) {
             const formattedDate = new Date(date).toISOString().split('T')[0];
             const response = await fetch(`https://api.sunrise-sunset.org/json?lat=${Number(latitude)}&lng=${Number(longitude)}&date=${formattedDate}&formatted=0`)
             const data = await response.json();
-            this.sunrise = data.results.sunrise;
-            this.sunset = data.results.sunset;
+            this.sunrise = new Date(data.results.sunrise).toISOString().slice(11, 16);
+            this.sunset = new Date(data.results.sunset).toISOString().slice(11, 16);
             console.log("Sunrise:", this.sunrise, "Sunset:", this.sunset);
             this.clicked = true;
             console.log(this.clicked)
@@ -249,7 +253,7 @@ export default {
             const m = totalMin % 60
             return `${h}h ${String(m).padStart(2, '0')}m`
         }
-    },mounted() {
+    }, mounted() {
         this.fetchLocation()
     }
 }
