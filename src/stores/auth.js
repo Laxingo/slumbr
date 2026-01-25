@@ -45,11 +45,11 @@ export const useAuthStore = defineStore("auth", {
     isAdmin: (state) =>
       state.accessToken !== null && Boolean(state.user?.isAdmin),
 
-    // ===== XP / LEVEL (para o Header e resto da app) =====
+    // XP / LEVEL (para o Header e resto da app)
     xp: (state) => clampNumber(state.user?.xp, 0),
 
     level: (state) => {
-      // se o user tiver "level" no db, usa-o; caso contrário calcula por xp
+      // se o user tiver "level" no db, usa-o senao calcula por xp
       const raw = Number(state.user?.level);
       if (Number.isFinite(raw) && raw > 0) return raw;
       return calcLevel(clampNumber(state.user?.xp, 0));
