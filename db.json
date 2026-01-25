@@ -57,6 +57,45 @@
         "latitude": 41.19522739510371,
         "longitude": -8.57720977915675
       }
+    },
+    {
+      "id": "b54f",
+      "userName": "chico",
+      "email": "chico@gmail.com",
+      "password": "123",
+      "level": 1,
+      "location": {
+        "latitude": null,
+        "longitude": null
+      },
+      "xp": 0,
+      "isAdmin": false
+    },
+    {
+      "id": "a2e7",
+      "userName": "bbb",
+      "email": "bbb@gmail.com",
+      "password": "123",
+      "level": 1,
+      "location": {
+        "latitude": null,
+        "longitude": null
+      },
+      "xp": 0,
+      "isAdmin": false
+    },
+    {
+      "id": "c456",
+      "userName": "aaa",
+      "email": "aaa@gmail.com",
+      "password": "123",
+      "level": 1,
+      "location": {
+        "latitude": null,
+        "longitude": null
+      },
+      "xp": 100,
+      "isAdmin": false
     }
   ],
   "sleepData": [
@@ -229,20 +268,40 @@
       "duration": 27000000,
       "quality": 5,
       "notes": "Quase impossivel sair da cama"
+    },
+    {
+      "id": "6c1b",
+      "userId": "b54f",
+      "date": 1768176000000,
+      "bedTime": 1768255200000,
+      "wakeUpTime": 1768294800000,
+      "duration": 39600000,
+      "quality": 5,
+      "notes": ""
+    },
+    {
+      "id": "f405",
+      "userId": "c456",
+      "date": 1767225600000,
+      "bedTime": 1767229800000,
+      "wakeUpTime": 1767262200000,
+      "duration": 32400000,
+      "quality": 2,
+      "notes": ""
     }
   ],
   "quests": [
     {
       "id": "1",
-      "description": "Log your sleep data for 7 consecutive days",
+      "description": "Enter your first sleep log",
       "xpReward": 100,
-      "goal": 7
+      "goal": 1
     },
     {
       "id": "2",
-      "description": "Achieve an average sleep quality of 4 or higher over a week",
+      "description": "Enter 7 Sleep Logs",
       "xpReward": 150,
-      "goal": 1
+      "goal": 7
     },
     {
       "id": "3",
@@ -257,84 +316,168 @@
       "questId": 2,
       "progress": 3,
       "completed": false,
-      "id": "4630"
+      "id": "4630",
+      "claimed": false
     },
     {
       "userId": "dd9b",
       "questId": 3,
       "progress": 5,
       "completed": false,
-      "id": "dff5"
+      "id": "dff5",
+      "claimed": false
     },
     {
       "userId": "dd9b",
       "questId": 1,
       "progress": 7,
       "completed": true,
-      "id": "3206"
+      "id": "3206",
+      "claimed": false
     },
     {
       "userId": "17c5",
       "questId": 1,
-      "progress": 0,
-      "completed": false,
-      "id": "uq-17c5-1"
+      "progress": 1,
+      "completed": true,
+      "id": "uq-17c5-1",
+      "claimed": false
     },
     {
       "userId": "17c5",
       "questId": 2,
       "progress": 0,
       "completed": false,
-      "id": "uq-17c5-2"
+      "id": "uq-17c5-2",
+      "claimed": false
     },
     {
       "userId": "17c5",
       "questId": 3,
       "progress": 0,
       "completed": false,
-      "id": "uq-17c5-3"
+      "id": "uq-17c5-3",
+      "claimed": false
     },
     {
       "userId": "3b34",
       "questId": 1,
       "progress": 0,
       "completed": false,
-      "id": "uq-17c5-1"
+      "id": "uq-17c5-1",
+      "claimed": false
     },
     {
       "userId": "3b34",
       "questId": 2,
       "progress": 0,
       "completed": false,
-      "id": "uq-17c5-2"
+      "id": "uq-17c5-2",
+      "claimed": false
     },
     {
       "userId": "3b34",
       "questId": 3,
       "progress": 0,
       "completed": false,
-      "id": "uq-17c5-3"
+      "id": "uq-17c5-3",
+      "claimed": false
     },
     {
       "userId": "e0be",
       "questId": 1,
       "progress": 0,
       "completed": false,
-      "id": "uq-17c5-1"
+      "id": "uq-17c5-1",
+      "claimed": false
     },
     {
       "userId": "e0be",
       "questId": 2,
       "progress": 0,
       "completed": false,
-      "id": "uq-17c5-2"
+      "id": "uq-17c5-2",
+      "claimed": false
     },
     {
       "userId": "e0be",
       "questId": 3,
       "progress": 0,
       "completed": false,
-      "id": "uq-17c5-3"
+      "id": "uq-17c5-3",
+      "claimed": false
+    },
+    {
+      "id": "0be6",
+      "userId": "b54f",
+      "questId": 1,
+      "progress": 1,
+      "completed": true,
+      "claimed": false
+    },
+    {
+      "id": "57ea",
+      "userId": "b54f",
+      "questId": 2,
+      "progress": 0,
+      "completed": true,
+      "claimed": false
+    },
+    {
+      "id": "9a9d",
+      "userId": "b54f",
+      "questId": 3,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "21af",
+      "userId": "a2e7",
+      "questId": 1,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "56e6",
+      "userId": "a2e7",
+      "questId": 2,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "457d",
+      "userId": "a2e7",
+      "questId": 3,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "3d73",
+      "userId": "c456",
+      "questId": 1,
+      "progress": 1,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "1265",
+      "userId": "c456",
+      "questId": 2,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "1565",
+      "userId": "c456",
+      "questId": 3,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
     }
   ]
 }

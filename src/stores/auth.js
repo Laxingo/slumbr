@@ -2,6 +2,21 @@ import { defineStore } from "pinia";
 
 const API_BASE = "http://127.0.0.1:3000";
 
+// helpers (fora do defineStore)
+const XP_PER_LEVEL = 200
+
+function calcLevel(xp) {
+  return 1 + Math.floor((Number(xp) || 0) / XP_PER_LEVEL)
+}
+
+function clampNumber(n, fallback = 0) {
+  const v = Number(n)
+  return Number.isFinite(v) ? v : fallback
+}
+
+
+
+
 function makeToken(user) {
   return btoa(`${user.id}:${user.email}`);
 }
@@ -45,6 +60,8 @@ export const useAuthStore = defineStore("auth", {
       this.user = null;
       this.setToken(null);
     },
+
+
 
     async fetchMe() {
       if (!this.accessToken || this.user) return this.user;
@@ -127,6 +144,7 @@ export const useAuthStore = defineStore("auth", {
             questId: i + 1,
             progress: 0,
             completed: false,
+            claimed: false,
           };
           const questRes = await fetch(`${API_BASE}/userQuests`, {
             method: "POST",
@@ -149,5 +167,33 @@ export const useAuthStore = defineStore("auth", {
       }
       return createdUser;
     },
+
+    async addXp(xpToAdd) {
+      const add = clampNumber(xpToAdd, 0)
+      if (!this.userId || add <= 0) return null
+
+      // garantir q tenho user carregado
+      const me = await this.fetchMe()
+      if (!me) return null
+
+      const newXp = clampNumber(me.xp, 0) + add
+      const newLevel = calcLevel(newXp)
+
+      const res = await fetch(`${API_BASE}/users/${encodeURIComponent(this.userId)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ xp: newXp, level: newLevel }),
+      })
+
+      if (!res.ok) return null
+
+      const updated = await res.json()
+      this.user = updated
+      return updated
+    }
+
+
   },
+
+
 });

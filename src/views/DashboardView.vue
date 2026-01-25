@@ -2,6 +2,7 @@
   <div class="home">
     <AppHeader />
     <SunPosApi />
+
     <main class="container dash">
       <div class="dash_top">
         <div>
@@ -51,7 +52,11 @@
             </div>
 
             <div class="table_wrap">
-              <SleepTable :sleepData="filteredSleepData" @edit="openEdit" @delete="deleteLog" />
+              <SleepTable
+                :sleepData="filteredSleepData"
+                @edit="openEdit"
+                @delete="deleteLog"
+              />
             </div>
           </div>
         </aside>
@@ -107,14 +112,13 @@
           </form>
         </div>
       </div>
-      <br>
+
+      <br />
+
       <aside class="dash_right">
         <div class="dash_card">
           <div class="dash_card_top">
             <h2 class="dash_card_title">Quests</h2>
-
-            <div class="dash_controls">
-            </div>
           </div>
 
           <div class="table_wrap">
@@ -122,7 +126,6 @@
           </div>
         </div>
       </aside>
-
     </main>
   </div>
 </template>
@@ -136,6 +139,8 @@ import UserPanel from '@/components/ui/UserPanel.vue'
 import QuestList from '@/components/ui/QuestList.vue'
 import SunPosApi from '@/components/Api/SunPosApi.vue'
 
+const API_BASE = 'http://127.0.0.1:3000'
+
 export default {
   components: { AppHeader, SleepTable, SleepChart, UserPanel, QuestList, SunPosApi },
 
@@ -143,14 +148,13 @@ export default {
     return {
       sleepData: [],
       editingId: null,
-      userName: "",
-      // UI
+      userName: '',
+
       limit: 14,
       isModalOpen: false,
       loading: false,
       error: '',
 
-      // form
       date: '',
       bedTime: '',
       wakeUpTime: '',
@@ -170,7 +174,7 @@ export default {
       if (this.limit === 0) return sorted
       return sorted.slice(0, this.limit)
     },
-    // WELCOME USER
+
     panelMetrics() {
       const data = [...this.sleepData]
         .filter(x => x?.userId === this.userId)
@@ -255,16 +259,67 @@ export default {
 
   methods: {
     async welcomeUser() {
-      const res = await fetch(`http://localhost:3000/users?id=${this.userId}`)
-      this.data = await res.json()
-      this.userName = this.data[0].userName
-
-
+      if (!this.userId) return
+      const res = await fetch(`${API_BASE}/users?id=${encodeURIComponent(this.userId)}`)
+      const data = await res.json()
+      this.userName = data?.[0]?.userName || ''
     },
+
     async fetchSleepData() {
       if (!this.userId) return
-      const res = await fetch(`http://localhost:3000/sleepData?userId=${this.userId}`)
+      const res = await fetch(`${API_BASE}/sleepData?userId=${encodeURIComponent(this.userId)}`)
       this.sleepData = await res.json()
+
+      // opcional: garante que a Quest 1 fica correta se já houver logs antigos
+      await this.syncQuestFirstLog()
+    },
+
+    async syncQuestFirstLog() {
+      if (!this.userId) return
+      const hasAtLeastOneLog = this.sleepData.some(x => x?.userId === this.userId)
+      if (!hasAtLeastOneLog) return
+      await this.completeQuestFirstLog()
+    },
+
+    async completeQuestFirstLog() {
+      if (!this.userId) return
+
+      const questId = 1
+
+      const qRes = await fetch(
+        `${API_BASE}/userQuests?userId=${encodeURIComponent(this.userId)}&questId=${questId}`
+      )
+      const rows = await qRes.json()
+
+      // Se não existir (utilizadores antigos), cria
+      if (!rows.length) {
+        await fetch(`${API_BASE}/userQuests`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: this.userId,
+            questId,
+            progress: 1,
+            completed: true,
+            claimed: false
+          })
+        })
+        return
+      }
+
+      const row = rows[0]
+
+      // Se já estiver completa, não mexe
+      if (row.completed) return
+
+      await fetch(`${API_BASE}/userQuests/${row.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          progress: 1,
+          completed: true
+        })
+      })
     },
 
     closeModal() {
@@ -298,8 +353,9 @@ export default {
 
       this.loading = true
       try {
+        // EDIT
         if (this.editingId) {
-          const res = await fetch(`http://localhost:3000/sleepData/${this.editingId}`, {
+          const res = await fetch(`${API_BASE}/sleepData/${this.editingId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -311,7 +367,8 @@ export default {
           return
         }
 
-        const res = await fetch(`http://localhost:3000/sleepData`, {
+        // CREATE
+        const res = await fetch(`${API_BASE}/sleepData`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -319,6 +376,10 @@ export default {
 
         const created = await res.json()
         this.sleepData.push(created)
+
+        // Quest 1: assim que existe o primeiro log, fica completed
+        await this.completeQuestFirstLog()
+
         this.closeModal()
       } catch (e) {
         this.error = 'Failed to save. Try again.'
@@ -344,7 +405,7 @@ export default {
       const ok = confirm('Delete this log?')
       if (!ok) return
 
-      await fetch(`http://localhost:3000/sleepData/${row.id}`, { method: 'DELETE' })
+      await fetch(`${API_BASE}/sleepData/${row.id}`, { method: 'DELETE' })
       this.sleepData = this.sleepData.filter((x) => x.id !== row.id)
     }
   }
@@ -352,6 +413,7 @@ export default {
 </script>
 
 <style scoped>
+/* (mantive o teu CSS exatamente como enviaste) */
 .dash {
   padding: 26px 0 60px;
   color: var(--text);
