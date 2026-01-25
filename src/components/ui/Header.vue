@@ -45,6 +45,9 @@ function logout() {
             Logout
           </button>
         </div>
+        <button v-if="!isAuthed" class="btn btn-ghost" type="button" @click="$router.push('/login')">
+          Login
+        </button>
       </nav>
 
       <nav class="nav" v-if="$route.path == '/dashboard'">

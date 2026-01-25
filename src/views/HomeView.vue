@@ -32,8 +32,6 @@ export default {
 <template>
   <div class="home">
     <AppHeader />
-
-
     <!-- Hero -->
     <main>
       <section class="hero">
