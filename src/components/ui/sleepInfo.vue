@@ -107,10 +107,6 @@
                     <th>Wake</th>
                     <th>Duration</th>
                     <th>Quality</th>
-                    <th class="col_actions">Actions</th>
-                    <th> <button class="btn btn-primary" type="button" @click="isModalOpen = true">
-                            + Add
-                        </button></th>
                 </tr>
             </thead>
 
@@ -122,16 +118,6 @@
                     <td>{{ fmtTime(row.wakeUpTime) }}</td>
                     <td>{{ fmtDuration(row.duration) }}</td>
                     <td>{{ row.quality ?? '-' }}</td>
-
-
-                    <td class="col_actions">
-                        <button class="btnMini" type="button" @click.stop="$emit('edit', row)">
-                            Edit
-                        </button>
-                        <button class="btnMini btnMini_danger" type="button" @click="$emit('delete', row)">
-                            Delete
-                        </button>
-                    </td>
                 </tr>
 
                 <tr v-if="!rows.length">
@@ -172,6 +158,7 @@ export default {
             required: false
         }
     },
+    emits: ['edit', 'delete'],
 
     computed: {
         userId() {

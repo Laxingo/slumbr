@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <AppHeader />
-    <SunPosApi />
 
     <main class="container dash">
       <div class="dash_top">
@@ -115,7 +114,7 @@ import SleepInfo from '@/components/ui/sleepInfo.vue'
 const API_BASE = 'http://localhost:3000'
 
 export default {
-  components: { AppHeader, SleepChart, QuestList, SunPosApi, SleepInfo },
+  components: { AppHeader, SleepChart, QuestList, SleepInfo },
 
 
   data() {

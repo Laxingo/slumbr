@@ -154,10 +154,10 @@
     {
       "userId": "17c5",
       "id": "1",
-      "date": 1767365069387,
+      "date": 1767312000000,
       "bedTime": 1767310200000,
       "wakeUpTime": 1767343500000,
-      "duration": 34500000,
+      "duration": 33300000,
       "quality": 4,
       "notes": "good sleep with no interruptions"
     },
@@ -318,7 +318,7 @@
       "bedTime": 1768786200000,
       "wakeUpTime": 1768813200000,
       "duration": 27000000,
-      "quality": 5,
+      "quality": 4,
       "notes": "Quase impossivel sair da cama"
     },
     {
