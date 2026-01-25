@@ -19,7 +19,7 @@
       <div class="dash_layout">
         <section class="dash_left">
           <div class="dash_card">
-            <SleepInfo :sleepData="sleepData" :metrics="panelMetrics"/>
+            <UserPanel :metrics="panelMetrics" />
           </div>
 
           <div class="dash_card">
@@ -33,7 +33,7 @@
           </div>
         </section>
 
-        <!-- <aside class="dash_right">
+        <aside class="dash_right">
           <div class="dash_card">
             <div class="dash_card_top">
               <h2 class="dash_card_title">Logs</h2>
@@ -51,11 +51,15 @@
               </div>
             </div>
 
-           <div class="table_wrap">
-              <SleepTable :sleepData="filteredSleepData" @edit="openEdit" @delete="deleteLog" />
-            </div> --> 
-          <!-- </div>
-        </aside> -->
+            <div class="table_wrap">
+              <SleepTable
+                :sleepData="filteredSleepData"
+                @edit="openEdit"
+                @delete="deleteLog"
+              />
+            </div>
+          </div>
+        </aside>
       </div>
 
       <!-- Modal -->
@@ -134,9 +138,11 @@ import { useAuthStore } from '@/stores/auth'
 import UserPanel from '@/components/ui/UserPanel.vue'
 import QuestList from '@/components/ui/QuestList.vue'
 import SunPosApi from '@/components/Api/SunPosApi.vue'
-import SleepInfo from '@/components/ui/sleepInfo.vue'
+
+const API_BASE = 'http://127.0.0.1:3000'
+
 export default {
-  components: { AppHeader, SleepTable, SleepChart, UserPanel, QuestList, SunPosApi, SleepInfo },
+  components: { AppHeader, SleepTable, SleepChart, UserPanel, QuestList, SunPosApi },
 
   data() {
     return {
@@ -162,7 +168,7 @@ export default {
       const auth = useAuthStore()
       return auth.userId
     },
-    
+
     filteredSleepData() {
       const sorted = [...this.sleepData].sort((a, b) => (b.date || 0) - (a.date || 0))
       if (this.limit === 0) return sorted
@@ -253,9 +259,10 @@ export default {
 
   methods: {
     async welcomeUser() {
-      const res = await fetch(`http://localhost:3000/users?id=${this.userId}`)
-      this.data = await res.json()
-      this.userName = this.data[0].userName
+      if (!this.userId) return
+      const res = await fetch(`${API_BASE}/users?id=${encodeURIComponent(this.userId)}`)
+      const data = await res.json()
+      this.userName = data?.[0]?.userName || ''
     },
 
     async fetchSleepData() {
