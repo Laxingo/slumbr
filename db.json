@@ -15,7 +15,7 @@
       "email": "ola@gmail.com",
       "password": "123",
       "level": 1,
-      "xp": 0,
+      "xp": 100,
       "location": {
         "latitude": 41.3597696,
         "longitude": -8.7359488
@@ -27,7 +27,7 @@
       "email": "test@gmail.com",
       "password": "123",
       "level": 1,
-      "xp": 20,
+      "xp": 120,
       "location": {
         "latitude": 41.3597696,
         "longitude": -8.7359488
@@ -270,7 +270,6 @@
       "notes": "Quase impossivel sair da cama"
     },
     {
-
       "id": "6c1b",
       "userId": "b54f",
       "date": 1768176000000,
@@ -289,7 +288,6 @@
       "duration": 32400000,
       "quality": 2,
       "notes": ""
-
     }
   ],
   "quests": [
@@ -335,7 +333,7 @@
       "progress": 7,
       "completed": true,
       "id": "3206",
-      "claimed": false
+      "claimed": true
     },
     {
       "userId": "17c5",
@@ -343,7 +341,7 @@
       "progress": 1,
       "completed": true,
       "id": "uq-17c5-1",
-      "claimed": false
+      "claimed": true
     },
     {
       "userId": "17c5",

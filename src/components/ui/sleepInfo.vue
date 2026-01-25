@@ -1,6 +1,53 @@
 <template>
+    <div class="panel" v-if="clicked">
+        <!-- General view -->
+        <div class="panel_top">
+            <div class="panel_dot"></div>
+            <div class="panel_dot"></div>
+            <div class="panel_dot"></div>
+            <div class="panel_title">{{ dayInfo.date }}</div>
+        </div>
 
-    <div class="panel">
+        <div class="panel_stats">
+            <div class="stat">
+                <div class="stat_label">Avg. duration</div>
+                <div class="stat_value">{{ metrics.avgDurationText }}</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat_label">Avg. regularity</div>
+                <div class="stat_value">{{ metrics.regularityLabel }}</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat_label">Avg. quality</div>
+                <div class="stat_value">{{ metrics.avgQualityText }}</div>
+            </div>
+
+        </div>
+
+        <div class="panel_progress">
+            <div class="progress">
+                <div class="progress_label">Duration</div>
+                <div class="progress_bar"><span :style="{ width: metrics.durationScore + '%' }"></span></div>
+            </div>
+
+            <div class="progress">
+                <div class="progress_label">Regularity</div>
+                <div class="progress_bar"><span :style="{ width: metrics.regularityScore + '%' }"></span></div>
+            </div>
+
+            <div class="progress">
+                <div class="progress_label">Quality</div>
+                <div class="progress_bar"><span :style="{ width: metrics.qualityScore + '%' }"></span></div>
+            </div>
+        </div>
+
+        <div class="panel_hint">
+            Based on your last {{ metrics.sampleSize }} logs.
+        </div>
+    </div>
+    <div class="panel" v-if="!clicked">
         <!-- General view -->
         <div class="panel_top">
             <div class="panel_dot"></div>
@@ -42,7 +89,6 @@
                 <div class="progress_label">Quality</div>
                 <div class="progress_bar"><span :style="{ width: metrics.qualityScore + '%' }"></span></div>
             </div>
-
         </div>
 
         <div class="panel_hint">
@@ -64,7 +110,7 @@
 
             <tbody>
                 <tr v-for="row in rows" :key="row.id"
-                    @click="fetchSunriseSunset(row.date, this.location.latitude, this.location.longitude)">
+                    @click="fetchSunriseSunset(row.date, this.location.latitude, this.location.longitude,row.id)">
                     <td>{{ fmtDate(row.date) }}</td>
                     <td>{{ fmtTime(row.bedTime) }}</td>
                     <td>{{ fmtTime(row.wakeUpTime) }}</td>
@@ -101,7 +147,9 @@ export default {
                 latitude: null,
                 longitude: null
             },
-            userData: {}
+            userData: {},
+            clicked: false,
+            dayInfo: {}
         }
     },
     props: {
@@ -168,13 +216,19 @@ export default {
             const data = await response.json()
             return data.results
         },
-        async fetchSunriseSunset(date, latitude, longitude) {
+        async fetchSunriseSunset(date, latitude, longitude,id) {
             const formattedDate = new Date(date).toISOString().split('T')[0];
             const response = await fetch(`https://api.sunrise-sunset.org/json?lat=${Number(latitude)}&lng=${Number(longitude)}&date=${formattedDate}&formatted=0`)
             const data = await response.json();
             this.sunrise = data.results.sunrise;
             this.sunset = data.results.sunset;
             console.log("Sunrise:", this.sunrise, "Sunset:", this.sunset);
+            this.clicked = true;
+            console.log(this.clicked)
+            const response2 = await fetch(`http://localhost:3000/sleepData/${id}`)
+            const data2 = await response2.json();
+            this.dayInfo = data2;
+            console.log(this.dayInfo);
         },
         fmtDate(ms) {
             if (!ms) return '-'
