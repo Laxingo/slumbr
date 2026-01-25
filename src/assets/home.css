@@ -372,9 +372,7 @@ body {
   display: grid;
   place-items: center;
   border-radius: 14px;
-  background: var(--accent-2);
-  border: 1px solid rgba(212, 177, 106, 0.25);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .card_title {

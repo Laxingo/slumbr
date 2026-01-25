@@ -154,7 +154,7 @@ export default {
 
           <div class="grid-3">
             <div class="card">
-              <div class="card_icone">*icone fixe*</div>
+              <div class="card_icone"><img src="/src/assets/icons/edit.svg" alt="Progress Icon"></div>
               <h3 class="card_title">Sleep logging</h3>
               <p class="card_text">
                 Log bedtime, wake time, duration, quality, interruptions and notes.
@@ -162,7 +162,7 @@ export default {
             </div>
 
             <div class="card">
-              <div class="card_icone">*icone fixe*</div>
+              <div class="card_icone"><img src="/src/assets/icons/insight.svg" alt="Progress Icon"></div>
               <h3 class="card_title">Trends & insights</h3>
               <p class="card_text">
                 Visualize your sleep over time and spot patterns that matter.
@@ -170,7 +170,7 @@ export default {
             </div>
 
             <div class="card">
-              <div class="card_icone">*icone fixe*</div>
+              <div class="card_icone"><img src="/src/assets/icons/porgress_Bar.svg" alt="Progress Icon"></div>
               <h3 class="card_title">Progress system</h3>
               <p class="card_text">
                 Earn points by improving yourself, feel rested and energized to unlock prizes!
