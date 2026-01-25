@@ -16,7 +16,7 @@
                 <tr v-for="quest in userQuests" :key="quest.id">
                     <td>{{questDetails.find(q => q.id == quest.questId)?.description}}</td>
                     <td>{{ quest.progress }}</td>
-                    <td>{{ quest.xpReward }}</td>
+                    <td>{{ questDetails.find(q => q.id == quest.questId)?.xpReward }}</td>
                     <td class="col_actions">
                         <button class="btnMini">Claim</button>
                     </td>
@@ -49,6 +49,7 @@ export default {
         async fetchQuestDetails() {
             const response = await fetch(`http://localhost:3000/quests`)
             this.questDetails = await response.json()
+            console.log(this.questDetails)
         }
     },
     mounted() {

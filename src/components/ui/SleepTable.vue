@@ -13,7 +13,7 @@
       </thead>
 
       <tbody>
-        <tr v-for="row in rows" :key="row.id">
+        <tr v-for="row in rows" :key="row.id" >
           <td>{{ fmtDate(row.date) }}</td>
           <td>{{ fmtTime(row.bedTime) }}</td>
           <td>{{ fmtTime(row.wakeUpTime) }}</td>
