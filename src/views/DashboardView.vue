@@ -109,13 +109,12 @@ import SleepChart from '@/components/ui/SleepChart.vue'
 import { useAuthStore } from '@/stores/auth'
 import UserPanel from '@/components/ui/UserPanel.vue'
 import QuestList from '@/components/ui/QuestList.vue'
-import SunPosApi from '@/components/Api/SunPosApi.vue'
 import SleepInfo from '@/components/ui/sleepInfo.vue'
 
 const API_BASE = 'http://localhost:3000'
 
 export default {
-  components: { AppHeader, SleepTable, SleepChart, UserPanel, QuestList, SunPosApi, SleepInfo },
+  components: { AppHeader, SleepTable, SleepChart, UserPanel, QuestList, SleepInfo },
 
   data() {
     return {

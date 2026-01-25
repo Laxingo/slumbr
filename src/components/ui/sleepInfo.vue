@@ -5,7 +5,7 @@
             <div class="panel_dot"></div>
             <div class="panel_dot"></div>
             <div class="panel_dot"></div>
-            <div class="panel_title">{{ dayInfo.date }}</div>
+            <div class="panel_title">{{ fmtDate(dayInfo.date) }}</div>
         </div>
 
         <div class="panel_stats">
@@ -16,7 +16,9 @@
 
             <div class="stat">
                 <div class="stat_label">Sunset</div>
-                <div class="stat_value">{{ this.sunset }}</div>
+                <div class="stat_value">{{ this.sunset }}
+                    <img src="https://www.svgrepo.com/show/532066/sunset.svg" alt="Sunset Icon" width="16" height="16">
+                </div>
             </div>
             <div class="stat">
                 <div class="stat_label">Quality</div>
@@ -26,29 +28,26 @@
                 <div class="stat_label">Sunrise</div>
                 <div class="stat_value">{{ this.sunrise }}</div>
             </div>
-
-
         </div>
 
         <div class="panel_progress">
             <div class="progress">
-                <div class="progress_label">Duration</div>
-                <div class="progress_bar"><span :style="{ width: metrics.durationScore + '%' }"></span></div>
+                <div class="progress_label">Notes</div>
+                <div><p>{{ dayInfo.notes }}</p></div>
             </div>
 
             <div class="progress">
-                <div class="progress_label">Regularity</div>
-                <div class="progress_bar"><span :style="{ width: metrics.regularityScore + '%' }"></span></div>
-            </div>
+                <div class="progress_label"></div>
+                <div class="actions">
+                    <button class="btnMini" type="button" @click.stop="$emit('edit', dayInfo)">Edit</button>
+                    <button class="btnMini btnMini_danger" type="button" @click="$emit('delete', dayInfo)">Delete</button>
+                </div>
 
-            <div class="progress">
-                <div class="progress_label">Quality</div>
-                <div class="progress_bar"><span :style="{ width: metrics.qualityScore + '%' }"></span></div>
             </div>
         </div>
 
         <div class="panel_hint">
-            Based on your last {{ metrics.sampleSize }} logs.
+
         </div>
     </div>
     <div class="panel" v-if="!clicked">
@@ -109,6 +108,9 @@
                     <th>Duration</th>
                     <th>Quality</th>
                     <th class="col_actions">Actions</th>
+                    <th> <button class="btn btn-primary" type="button" @click="isModalOpen = true">
+                            + Add
+                        </button></th>
                 </tr>
             </thead>
 
@@ -121,8 +123,9 @@
                     <td>{{ fmtDuration(row.duration) }}</td>
                     <td>{{ row.quality ?? '-' }}</td>
 
+
                     <td class="col_actions">
-                        <button class="btnMini" type="button" @click="$emit('edit', row)">
+                        <button class="btnMini" type="button" @click.stop="$emit('edit', row)">
                             Edit
                         </button>
                         <button class="btnMini btnMini_danger" type="button" @click="$emit('delete', row)">
