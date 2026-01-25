@@ -32,30 +32,6 @@
             </div>
           </div>
         </section>
-
-        <!-- <aside class="dash_right">
-          <div class="dash_card">
-            <div class="dash_card_top">
-              <h2 class="dash_card_title">Logs</h2>
-
-              <div class="dash_controls">
-                <label class="dash_select">
-                  <span>Show</span>
-                  <select v-model.number="limit">
-                    <option :value="7">Last 7</option>
-                    <option :value="14">Last 14</option>
-                    <option :value="30">Last 30</option>
-                    <option :value="0">All</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-
-           <div class="table_wrap">
-              <SleepTable :sleepData="filteredSleepData" @edit="openEdit" @delete="deleteLog" />
-            </div> --> 
-          <!-- </div>
-        </aside> -->
       </div>
 
       <!-- Modal -->
@@ -260,10 +236,10 @@ export default {
 
     async fetchSleepData() {
       if (!this.userId) return
-      const res = await fetch(`${API_BASE}/sleepData?userId=${encodeURIComponent(this.userId)}`)
+      const res = await fetch(`http://localhost:3000/sleepData?userId=${encodeURIComponent(this.userId)}`)
       this.sleepData = await res.json()
 
-      // opcional: garante que a Quest 1 fica correta se já houver logs antigos
+
       await this.syncQuestFirstLog()
     },
 
@@ -280,7 +256,7 @@ export default {
       const questId = 1
 
       const qRes = await fetch(
-        `${API_BASE}/userQuests?userId=${encodeURIComponent(this.userId)}&questId=${questId}`
+        `http://localhost:3000/userQuests?userId=${encodeURIComponent(this.userId)}&questId=${questId}`
       )
       const rows = await qRes.json()
 
@@ -305,7 +281,7 @@ export default {
       // Se já estiver completa, não mexe
       if (row.completed) return
 
-      await fetch(`${API_BASE}/userQuests/${row.id}`, {
+      await fetch(`http://localhost:3000/userQuests/${row.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -348,7 +324,7 @@ export default {
       try {
         // EDIT
         if (this.editingId) {
-          const res = await fetch(`${API_BASE}/sleepData/${this.editingId}`, {
+          const res = await fetch(`http://localhost:3000/sleepData/${this.editingId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -361,7 +337,7 @@ export default {
         }
 
         // CREATE
-        const res = await fetch(`${API_BASE}/sleepData`, {
+        const res = await fetch(`http://localhost:3000/sleepData`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -398,7 +374,7 @@ export default {
       const ok = confirm('Delete this log?')
       if (!ok) return
 
-      await fetch(`${API_BASE}/sleepData/${row.id}`, { method: 'DELETE' })
+      await fetch(`http://localhost:3000/sleepData/${row.id}`, { method: 'DELETE' })
       this.sleepData = this.sleepData.filter((x) => x.id !== row.id)
     }
   }
