@@ -63,12 +63,12 @@
       "userName": "chico",
       "email": "chico@gmail.com",
       "password": "123",
-      "level": 1,
+      "level": 2,
       "location": {
         "latitude": null,
         "longitude": null
       },
-      "xp": 0,
+      "xp": 250,
       "isAdmin": false
     },
     {
@@ -88,6 +88,19 @@
       "id": "c456",
       "userName": "aaa",
       "email": "aaa@gmail.com",
+      "password": "123",
+      "level": 1,
+      "location": {
+        "latitude": null,
+        "longitude": null
+      },
+      "xp": 100,
+      "isAdmin": false
+    },
+    {
+      "id": "0db3",
+      "userName": "hoje",
+      "email": "hoje@gmail.com",
       "password": "123",
       "level": 1,
       "location": {
@@ -288,6 +301,26 @@
       "duration": 32400000,
       "quality": 2,
       "notes": ""
+    },
+    {
+      "id": "1680",
+      "userId": "1e42",
+      "date": 1767225600000,
+      "bedTime": 1767309000000,
+      "wakeUpTime": 1767348600000,
+      "duration": 39600000,
+      "quality": 4,
+      "notes": ""
+    },
+    {
+      "id": "c5f4",
+      "userId": "0db3",
+      "date": 1767225600000,
+      "bedTime": 1767309000000,
+      "wakeUpTime": 1767348600000,
+      "duration": 39600000,
+      "quality": 5,
+      "notes": ""
     }
   ],
   "quests": [
@@ -413,7 +446,7 @@
       "questId": 1,
       "progress": 1,
       "completed": true,
-      "claimed": false
+      "claimed": true
     },
     {
       "id": "57ea",
@@ -421,7 +454,7 @@
       "questId": 2,
       "progress": 0,
       "completed": true,
-      "claimed": false
+      "claimed": true
     },
     {
       "id": "9a9d",
@@ -474,6 +507,30 @@
     {
       "id": "1565",
       "userId": "c456",
+      "questId": 3,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "1b1a",
+      "userId": "0db3",
+      "questId": 1,
+      "progress": 1,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "9e0e",
+      "userId": "0db3",
+      "questId": 2,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "3019",
+      "userId": "0db3",
       "questId": 3,
       "progress": 0,
       "completed": false,

@@ -2,20 +2,17 @@ import { defineStore } from "pinia";
 
 const API_BASE = "http://127.0.0.1:3000";
 
-// helpers (fora do defineStore)
-const XP_PER_LEVEL = 200
+// helpers
+const XP_PER_LEVEL = 200;
 
 function calcLevel(xp) {
-  return 1 + Math.floor((Number(xp) || 0) / XP_PER_LEVEL)
+  return 1 + Math.floor((Number(xp) || 0) / XP_PER_LEVEL);
 }
 
 function clampNumber(n, fallback = 0) {
-  const v = Number(n)
-  return Number.isFinite(v) ? v : fallback
+  const v = Number(n);
+  return Number.isFinite(v) ? v : fallback;
 }
-
-
-
 
 function makeToken(user) {
   return btoa(`${user.id}:${user.email}`);
@@ -47,6 +44,35 @@ export const useAuthStore = defineStore("auth", {
 
     isAdmin: (state) =>
       state.accessToken !== null && Boolean(state.user?.isAdmin),
+
+    // ===== XP / LEVEL (para o Header e resto da app) =====
+    xp: (state) => clampNumber(state.user?.xp, 0),
+
+    level: (state) => {
+      // se o user tiver "level" no db, usa-o; caso contrário calcula por xp
+      const raw = Number(state.user?.level);
+      if (Number.isFinite(raw) && raw > 0) return raw;
+      return calcLevel(clampNumber(state.user?.xp, 0));
+    },
+
+    xpPerLevel: () => XP_PER_LEVEL,
+
+    xpIntoLevel() {
+      // xp dentro do nível atual (0..199)
+      return this.xp % XP_PER_LEVEL;
+    },
+
+    xpToNextLevel() {
+      // quanto falta para o próximo nível
+      return XP_PER_LEVEL - this.xpIntoLevel;
+    },
+
+    xpProgressPct() {
+      return Math.max(
+        0,
+        Math.min(100, (this.xpIntoLevel / XP_PER_LEVEL) * 100),
+      );
+    },
   },
 
   actions: {
@@ -61,17 +87,13 @@ export const useAuthStore = defineStore("auth", {
       this.setToken(null);
     },
 
-
-
     async fetchMe() {
       if (!this.accessToken || this.user) return this.user;
 
       const { userId } = decodeToken(this.accessToken);
       if (!userId) return null;
 
-      const res = await fetch(
-        `${API_BASE}/users/${encodeURIComponent(userId)}`,
-      );
+      const res = await fetch(`${API_BASE}/users/${encodeURIComponent(userId)}`);
       if (!res.ok) return null;
 
       const user = await res.json();
@@ -89,7 +111,6 @@ export const useAuthStore = defineStore("auth", {
         if (!res.ok) return null;
 
         const users = await res.json();
-        console.log(users);
         if (!users.length) return null;
 
         const user = users[0];
@@ -104,7 +125,6 @@ export const useAuthStore = defineStore("auth", {
     async signUpUser(email, password, userName) {
       if (!email || !password || !userName) return null;
 
-      // Ver se o email existe
       const checkRes = await fetch(
         `${API_BASE}/users?email=${encodeURIComponent(email)}`,
       );
@@ -112,7 +132,6 @@ export const useAuthStore = defineStore("auth", {
       const existing = await checkRes.json();
       if (existing.length) return null;
 
-      // Criar utilizador com os detalhes, n sei se metemos o nivel ou gerimos isso de outra forma apartir do xp
       const newUser = {
         userName,
         email,
@@ -122,6 +141,7 @@ export const useAuthStore = defineStore("auth", {
         xp: 0,
         isAdmin: false,
       };
+
       const createRes = await fetch(`${API_BASE}/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -132,7 +152,6 @@ export const useAuthStore = defineStore("auth", {
       const createdUser = await createRes.json();
       const userId = createdUser.id;
 
-      // criar as quests apartir das quests que ja existem
       try {
         const questList = await fetch(`${API_BASE}/quests`);
         if (!questList.ok) throw new Error("Falha ao buscar quests");
@@ -157,9 +176,7 @@ export const useAuthStore = defineStore("auth", {
         console.warn("Quest assignment failed, but user was created", e);
       }
 
-      // Guardar o user no store e criar token
       this.user = createdUser;
-
       try {
         this.setToken(makeToken(createdUser));
       } catch (e) {
@@ -169,31 +186,26 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async addXp(xpToAdd) {
-      const add = clampNumber(xpToAdd, 0)
-      if (!this.userId || add <= 0) return null
+      const add = clampNumber(xpToAdd, 0);
+      if (!this.userId || add <= 0) return null;
 
-      // garantir q tenho user carregado
-      const me = await this.fetchMe()
-      if (!me) return null
+      const me = await this.fetchMe();
+      if (!me) return null;
 
-      const newXp = clampNumber(me.xp, 0) + add
-      const newLevel = calcLevel(newXp)
+      const newXp = clampNumber(me.xp, 0) + add;
+      const newLevel = calcLevel(newXp);
 
       const res = await fetch(`${API_BASE}/users/${encodeURIComponent(this.userId)}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ xp: newXp, level: newLevel }),
-      })
+      });
 
-      if (!res.ok) return null
+      if (!res.ok) return null;
 
-      const updated = await res.json()
-      this.user = updated
-      return updated
-    }
-
-
+      const updated = await res.json();
+      this.user = updated;
+      return updated;
+    },
   },
-
-
 });
