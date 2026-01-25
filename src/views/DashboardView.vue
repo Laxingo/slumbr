@@ -19,7 +19,8 @@
       <div class="dash_layout">
         <section class="dash_left">
           <div class="dash_card">
-            <SleepInfo :sleepData="sleepData" :metrics="panelMetrics" />
+            <SleepInfo :sleepData="sleepData" :metrics="panelMetrics" @edit="openEdit" @delete="deleteLog" />
+
           </div>
 
           <div class="dash_card">
@@ -94,7 +95,7 @@
           </div>
 
           <div class="table_wrap">
-            <QuestList :key="questRefreshKey" />
+            <QuestList />
           </div>
         </div>
       </aside>
@@ -103,11 +104,11 @@
 </template>
 
 <script>
-import AppHeader from '@/components/ui/Header.vue'
-import SleepTable from '@/components/ui/SleepTable.vue'
-import SleepChart from '@/components/ui/SleepChart.vue'
+import { useQuestsStore } from '@/stores/quests'
 import { useAuthStore } from '@/stores/auth'
-import UserPanel from '@/components/ui/UserPanel.vue'
+
+import AppHeader from '@/components/ui/Header.vue'
+import SleepChart from '@/components/ui/SleepChart.vue'
 import QuestList from '@/components/ui/QuestList.vue'
 import SunPosApi from '@/components/Api/SunPosApi.vue'
 import SleepInfo from '@/components/ui/sleepInfo.vue'
@@ -115,7 +116,7 @@ import SleepInfo from '@/components/ui/sleepInfo.vue'
 const API_BASE = 'http://localhost:3000'
 
 export default {
-  components: { AppHeader, SleepTable, SleepChart, UserPanel, QuestList, SunPosApi, SleepInfo },
+  components: { AppHeader, SleepChart, QuestList, SunPosApi, SleepInfo },
 
   data() {
     return {
@@ -132,15 +133,13 @@ export default {
       bedTime: '',
       wakeUpTime: '',
       quality: '',
-      notes: '',
-      questRefreshKey: 0
+      notes: ''
     }
   },
 
   computed: {
     userId() {
-      const auth = useAuthStore()
-      return auth.userId
+      return useAuthStore().userId
     },
 
     filteredSleepData() {
@@ -233,9 +232,10 @@ export default {
 
   methods: {
     async welcomeUser() {
+      if (!this.userId) return
       const res = await fetch(`${API_BASE}/users?id=${encodeURIComponent(this.userId)}`)
-      this.data = await res.json()
-      this.userName = this.data[0].userName
+      const rows = await res.json()
+      this.userName = rows?.[0]?.userName || ''
     },
 
     async fetchSleepData() {
@@ -243,112 +243,9 @@ export default {
       const res = await fetch(`${API_BASE}/sleepData?userId=${encodeURIComponent(this.userId)}`)
       this.sleepData = await res.json()
 
-      // Quest 1 2 e 3
-      await this.syncQuestFirstLog()
-      await this.syncQuestSevenLogs()
-      await this.syncQuestFiveNightsWeek()
+      await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
     },
 
-    // ---------- QUEST 1 ----------
-    async syncQuestFirstLog() {
-      if (!this.userId) return
-      const hasAtLeastOneLog = this.sleepData.some(x => x?.userId === this.userId)
-      if (!hasAtLeastOneLog) return
-      await this.completeQuestFirstLog()
-    },
-
-    async completeQuestFirstLog() {
-      if (!this.userId) return
-
-      const questId = 1
-
-      const qRes = await fetch(
-        `${API_BASE}/userQuests?userId=${encodeURIComponent(this.userId)}&questId=${questId}`
-      )
-      const rows = await qRes.json()
-
-      // Se não existir (utilizadores antigos), cria
-      if (!rows.length) {
-        await fetch(`${API_BASE}/userQuests`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: this.userId,
-            questId,
-            progress: 1,
-            completed: true,
-            claimed: false
-          })
-        })
-        this.questRefreshKey++
-        return
-      }
-
-      const row = rows[0]
-      if (row.completed) return
-
-      await fetch(`${API_BASE}/userQuests/${encodeURIComponent(row.id)}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ progress: 1, completed: true })
-      })
-
-      this.questRefreshKey++
-    },
-
-    //QUEST 2 (7 logs)
-    async syncQuestSevenLogs() {
-      if (!this.userId) return
-
-      const questId = 2
-      const goal = 7
-
-      const count = Array.isArray(this.sleepData)
-        ? this.sleepData.filter(x => x?.userId === this.userId).length
-        : 0
-
-      const progress = Math.min(count, goal)
-      const completed = progress >= goal
-
-      const qRes = await fetch(
-        `${API_BASE}/userQuests?userId=${encodeURIComponent(this.userId)}&questId=${questId}`
-      )
-      const rows = await qRes.json()
-
-      // Se não existir, cria
-      if (!rows.length) {
-        await fetch(`${API_BASE}/userQuests`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: this.userId,
-            questId,
-            progress,
-            completed,
-            claimed: false
-          })
-        })
-        this.questRefreshKey++
-        return
-      }
-
-      const row = rows[0]
-      const needsUpdate =
-        Number(row.progress || 0) !== progress ||
-        Boolean(row.completed) !== completed
-
-      if (!needsUpdate) return
-
-      await fetch(`${API_BASE}/userQuests/${encodeURIComponent(row.id)}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ progress, completed })
-      })
-
-      this.questRefreshKey++
-    },
-
-    // MODAL
     closeModal() {
       this.isModalOpen = false
       this.error = ''
@@ -390,6 +287,9 @@ export default {
 
           const updated = await res.json()
           this.sleepData = this.sleepData.map((x) => (x.id === updated.id ? updated : x))
+
+          await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
+
           this.closeModal()
           return
         }
@@ -404,10 +304,7 @@ export default {
         const created = await res.json()
         this.sleepData.push(created)
 
-        // Quest 1 + Quest 2 (sync após create)
-        await this.completeQuestFirstLog()
-        await this.syncQuestSevenLogs()
-        await this.syncQuestFiveNightsWeek()
+        await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
 
         this.closeModal()
       } catch (e) {
@@ -437,106 +334,11 @@ export default {
       await fetch(`${API_BASE}/sleepData/${encodeURIComponent(row.id)}`, { method: 'DELETE' })
       this.sleepData = this.sleepData.filter((x) => x.id !== row.id)
 
-      // Quest 2 (sync após delete)
-      await this.syncQuestSevenLogs()
-      await this.syncQuestFiveNightsWeek()
-    },
-
-    async syncQuestFiveNightsWeek() {
-      if (!this.userId) return
-
-      const questId = 3
-      const goal = 5
-      const MIN_MS = 8 * 60 * 60 * 1000 // 8h
-
-      const userLogs = Array.isArray(this.sleepData)
-        ? this.sleepData.filter(x => x?.userId === this.userId)
-        : []
-
-      // Agrupa por semana ISO e conta noites >= 8h
-      const countsByWeek = new Map()
-
-      for (const log of userLogs) {
-        const dateMs = Number(log?.date || 0)
-        const durMs = Number(log?.duration || 0)
-        if (!dateMs || durMs < MIN_MS) continue
-
-        const weekKey = isoWeekKey(dateMs)
-        countsByWeek.set(weekKey, (countsByWeek.get(weekKey) || 0) + 1)
-      }
-
-      // Melhor semana do histórico
-      let best = 0
-      for (const v of countsByWeek.values()) best = Math.max(best, v)
-
-      const progress = Math.min(best, goal)
-      const completed = progress >= goal
-
-      const qRes = await fetch(
-        `${API_BASE}/userQuests?userId=${encodeURIComponent(this.userId)}&questId=${questId}`
-      )
-      const rows = await qRes.json()
-
-      if (!rows.length) {
-        await fetch(`${API_BASE}/userQuests`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: this.userId,
-            questId,
-            progress,
-            completed,
-            claimed: false
-          })
-        })
-        this.questRefreshKey++
-        return
-      }
-
-      const row = rows[0]
-
-      const needsUpdate =
-        Number(row.progress || 0) !== progress ||
-        Boolean(row.completed) !== completed
-
-      if (!needsUpdate) return
-
-      await fetch(`${API_BASE}/userQuests/${encodeURIComponent(row.id)}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ progress, completed })
-      })
-
-      this.questRefreshKey++
-
-      // helpers locais (ISO week) 
-      function isoWeekKey(ms) {
-        const d = new Date(ms)
-        if (isNaN(d)) return 'invalid'
-
-        // cria data em UTC (meia-noite)
-        const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
-        // ISO: segunda=1..domingo=7
-        const day = date.getUTCDay() || 7
-        // vai para quinta-feira da mesma semana
-        date.setUTCDate(date.getUTCDate() + 4 - day)
-
-        const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1))
-        const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1) / 7)
-
-        const year = date.getUTCFullYear()
-        return `${year}-W${String(weekNo).padStart(2, '0')}`
-      }
+      await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
     }
-
-
-
-
   }
 }
 </script>
-
-
 
 <style scoped>
 .dash {
