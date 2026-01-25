@@ -54,8 +54,8 @@
       "xp": 0,
       "isAdmin": false,
       "location": {
-        "latitude": null,
-        "longitude": null
+        "latitude": 41.19522739510371,
+        "longitude": -8.57720977915675
       }
     }
   ],
@@ -233,19 +233,19 @@
   ],
   "quests": [
     {
-      "id": 1,
+      "id": "1",
       "description": "Log your sleep data for 7 consecutive days",
       "xpReward": 100,
       "goal": 7
     },
     {
-      "id": 2,
+      "id": "2",
       "description": "Achieve an average sleep quality of 4 or higher over a week",
       "xpReward": 150,
       "goal": 1
     },
     {
-      "id": 3,
+      "id": "3",
       "description": "Sleep at least 8 hours for 5 nights in a week",
       "xpReward": 200,
       "goal": 5
