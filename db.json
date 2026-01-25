@@ -17,8 +17,8 @@
       "level": 1,
       "xp": 0,
       "location": {
-        "latitude": null,
-        "longitude": null
+        "latitude": 41.3597696,
+        "longitude": -8.7359488
       }
     },
     {
@@ -229,6 +229,16 @@
       "duration": 27000000,
       "quality": 5,
       "notes": "Quase impossivel sair da cama"
+    },
+    {
+      "id": "ec78",
+      "userId": "17c5",
+      "date": 1769299200000,
+      "bedTime": 1769304900000,
+      "wakeUpTime": 1769331600000,
+      "duration": 26700000,
+      "quality": 5,
+      "notes": ""
     }
   ],
   "quests": [
