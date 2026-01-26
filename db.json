@@ -520,6 +520,26 @@
       "duration": 36000000,
       "quality": 3,
       "notes": "Barulho dos vizinhos perturbou um pouco"
+    },
+    {
+      "id": "ead8",
+      "userId": "17c5",
+      "date": 1769299200000,
+      "bedTime": 1769392800000,
+      "wakeUpTime": 1769420100000,
+      "duration": 27300000,
+      "quality": 1,
+      "notes": "AAAAAAAAAA"
+    },
+    {
+      "id": "988f",
+      "userId": "17c5",
+      "date": 1769212800000,
+      "bedTime": 1769299200000,
+      "wakeUpTime": 1769345100000,
+      "duration": 45900000,
+      "quality": 5,
+      "notes": "good sleep with no interruptions"
     }
   ],
   "quests": [
@@ -578,7 +598,7 @@
     {
       "userId": "17c5",
       "questId": 2,
-      "progress": 4,
+      "progress": 6,
       "completed": false,
       "id": "uq-17c5-2",
       "claimed": false

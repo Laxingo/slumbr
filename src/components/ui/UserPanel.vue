@@ -49,13 +49,16 @@
     </div>
 </template>
 
-<script setup>
-const props = defineProps({
-    metrics: {
-        type: Object,
-        required: true
+<script>
+export default{
+    props:{
+        metrics: {
+            type: Object,
+            required: true
+        }
     }
-})
+}
+
 </script>
 
 <style scoped>

@@ -28,7 +28,7 @@ describe("Auth Store - loginUser,admin", () => {
             ok: true,
             json: () =>
               Promise.resolve([
-                { id: "u1", email: "test@example.com", password: "hashedPassword" },
+                { id: "u1", email: "test@example.com", password: "hashedPassword",isAdmin:true },
               ]),
           });
         return Promise.resolve({ ok: false });
@@ -37,8 +37,9 @@ describe("Auth Store - loginUser,admin", () => {
 
     const user = await authStore.loginUser("test@example.com", "password");
 // ver se deu login com sucesso
-    expect(user).toEqual({ id: "u1", email: "test@example.com", password: "hashedPassword" });
+    expect(user).toEqual({ id: "u1", email: "test@example.com", password: "hashedPassword",isAdmin:true});
     expect(authStore.user).toEqual(user);
+    expect(user.isAdmin).toEqual(true)
     expect(authStore.accessToken).toBe(btoa("u1:test@example.com"));
   });
 });
