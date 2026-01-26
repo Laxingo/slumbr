@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { titleFromLevel } from '@/constants/titles'
 
 const API_BASE = "http://127.0.0.1:3000";
 
@@ -73,6 +74,12 @@ export const useAuthStore = defineStore("auth", {
         Math.min(100, (this.xpIntoLevel / XP_PER_LEVEL) * 100),
       );
     },
+
+    userTitle: (state) => {
+      const level = Number(state.user?.level || 1)
+      return titleFromLevel(level)
+    }
+
   },
 
   actions: {

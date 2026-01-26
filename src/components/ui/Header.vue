@@ -12,6 +12,7 @@ const level = computed(() => auth.level)
 const xpIntoLevel = computed(() => auth.xpIntoLevel)
 const xpPerLevel = computed(() => auth.xpPerLevel)
 const xpProgressPct = computed(() => auth.xpProgressPct)
+const userTitle = computed(() => auth.userTitle)
 
 onMounted(async () => {
   if (auth.isAuthenticated) await auth.fetchMe()
@@ -37,20 +38,23 @@ function logout() {
         <span class="brand_tag">sleep tracking</span>
       </RouterLink>
 
+
       <!-- XP / LEVEL (quando ta logado) -->
       <div v-if="isAuthed" class="xp_card" aria-label="User level and XP">
         <div class="xp_top">
-          <span class="lvl_badge">LVL {{ level }}</span>
+          <div class="xp_left">
+            <span class="lvl_badge">LVL {{ level }}</span>
+            <span class="user_title">{{ userTitle }}</span>
+          </div>
+
           <span class="xp_text">{{ xpIntoLevel }} / {{ xpPerLevel }} XP</span>
         </div>
 
-        <div
-          class="xp_bar"
-          role="progressbar"
-          :aria-valuenow="Math.round(xpProgressPct)"
-          aria-valuemin="0"
-          aria-valuemax="100"
-        >
+
+
+
+        <div class="xp_bar" role="progressbar" :aria-valuenow="Math.round(xpProgressPct)" aria-valuemin="0"
+          aria-valuemax="100">
           <div class="xp_fill" :style="{ width: xpProgressPct + '%' }"></div>
           <div class="xp_glow" :style="{ width: xpProgressPct + '%' }"></div>
         </div>
@@ -73,12 +77,7 @@ function logout() {
           </button>
         </div>
 
-        <button
-          v-if="!isAuthed"
-          class="btn btn-ghost"
-          type="button"
-          @click="$router.push('/login')"
-        >
+        <button v-if="!isAuthed" class="btn btn-ghost" type="button" @click="$router.push('/login')">
           Login
         </button>
       </nav>
@@ -105,18 +104,15 @@ function logout() {
 </template>
 
 <style scoped>
-
 .topbar {
   position: sticky;
   top: 0;
   z-index: 50;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  background: linear-gradient(
-    180deg,
-    rgba(12, 14, 20, 0.82) 0%,
-    rgba(12, 14, 20, 0.62) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(12, 14, 20, 0.82) 0%,
+      rgba(12, 14, 20, 0.62) 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -179,12 +175,26 @@ function logout() {
   color: rgba(255, 255, 255, 0.70);
 }
 
+/* TITLE */
+.title_row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: -2px;
+}
+
+.user_title {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
 .xp_bar {
   position: relative;
   height: 9px;
   border-radius: 999px;
   overflow: hidden;
-
   background: rgba(255, 255, 255, 0.10);
   border: 1px solid rgba(255, 255, 255, 0.10);
 }
@@ -193,13 +203,9 @@ function logout() {
   height: 100%;
   border-radius: 999px;
   width: 0%;
-
-  /* barra */
-  background: linear-gradient(
-    90deg,
-    rgb(212, 177, 106),
-    rgba(212, 177, 106, 0.2)
-  );
+  background: linear-gradient(90deg,
+      rgb(212, 177, 106),
+      rgba(212, 177, 106, 0.2));
   transition: width 220ms ease;
 }
 
@@ -210,13 +216,9 @@ function logout() {
   width: 0%;
   pointer-events: none;
   transition: width 220ms ease;
-
-  /* glow */
-  background: radial-gradient(
-    closest-side,
-    rgba(255, 255, 255, 0.35),
-    rgba(255, 255, 255, 0.0)
-  );
+  background: radial-gradient(closest-side,
+      rgba(255, 255, 255, 0.35),
+      rgba(255, 255, 255, 0.0));
   filter: blur(6px);
   opacity: 0.85;
 }
