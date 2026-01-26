@@ -1,35 +1,83 @@
 <template>
   <div class="home">
     <AppHeader />
-
     <main class="container dash">
       <div class="dash_top">
-        <div>
-          <h1>Welcome, {{ userName }}!</h1>
-          <h1 class="dash_title">My Sleep Dashboard</h1>
-          <p class="dash_subtitle">Log your sleep and track trends over time.</p>
+        <div class="dash_head">
+          <div class="dash_kicker">Welcome, {{ userName }}.</div>
+          <h1 class="dash_title">Sleep Dashboard</h1>
         </div>
 
-        <button class="btn btn-primary" type="button" @click="isModalOpen = true">
+        <button class="btn btn-primary dash_add" type="button" @click="openCreate">
           + Add
         </button>
       </div>
 
-      <div class="dash_layout">
-        <section class="dash_left">
-          <div class="dash_card">
-            <SleepInfo :sleepData="sleepData" :metrics="panelMetrics" @edit="openEdit" @delete="deleteLog" />
-
+      <!-- Grid -->
+      <div class="dash_grid">
+        <!-- Panel -->
+        <section class="dash_card dash_card_panel">
+          <div class="dash_card_top">
+            <h2 class="dash_card_title">Summary</h2>
+            <div class="dash_card_meta">
+              {{ selectedDay ? 'Selected day' : 'Weekly overview' }}
+            </div>
           </div>
 
-          <div class="dash_card">
-            <div class="dash_card_top">
-              <h2 class="dash_card_title">Trends</h2>
-            </div>
+          <SleepPanel
+            :metrics="panelMetrics"
+            :selected="selectedDay"
+            :sunrise="sunrise"
+            :sunset="sunset"
+            @edit="openEdit"
+            @delete="deleteLog"
+            @clear="clearSelected"
+          />
+        </section>
 
-            <div class="chart_wrap">
-              <SleepChart :sleepData="filteredSleepData" />
+        <!-- Logs  -->
+        <section class="dash_card dash_card_logs">
+          <div class="dash_card_top">
+            <h2 class="dash_card_title">Logs</h2>
+
+            <div class="pager">
+              <button class="pager_btn" type="button" @click="prevPage" :disabled="page === 1">
+                Prev
+              </button>
+              <span class="pager_txt">{{ page }} / {{ totalPages }}</span>
+              <button
+                class="pager_btn"
+                type="button"
+                @click="nextPage"
+                :disabled="page === totalPages"
+              >
+                Next
+              </button>
             </div>
+          </div>
+
+          <SleepLogsTable
+            :rows="pagedSleepData"
+            :selectedId="selectedDay?.id ?? null"
+            @select="selectRow"
+          />
+
+          <div v-if="!hasCoords" class="coord_hint">
+            To see sunrise/sunset, set your location (user profile location must have latitude/longitude).
+          </div>
+        </section>
+
+        <!-- Chart -->
+        <section class="dash_card dash_card_chart">
+          <div class="dash_card_top">
+            <h2 class="dash_card_title">Trends</h2>
+            <div class="dash_card_meta">
+              {{ filteredSleepData.length ? `${filteredSleepData.length} logs` : 'No data' }}
+            </div>
+          </div>
+
+          <div class="chart_frame chart_frame_full">
+            <SleepChart :sleepData="filteredSleepData" />
           </div>
         </section>
       </div>
@@ -68,7 +116,11 @@
 
             <label class="field">
               <span class="field_label">Notes (optional)</span>
-              <textarea class="input textarea" v-model="notes" placeholder="Anything relevant..."></textarea>
+              <textarea
+                class="input textarea"
+                v-model="notes"
+                placeholder="Anything relevant..."
+              ></textarea>
             </label>
 
             <p v-if="error" class="form_error">{{ error }}</p>
@@ -84,8 +136,6 @@
           </form>
         </div>
       </div>
-
-
     </main>
   </div>
 </template>
@@ -96,13 +146,13 @@ import { useAuthStore } from '@/stores/auth'
 
 import AppHeader from '@/components/ui/Header.vue'
 import SleepChart from '@/components/ui/SleepChart.vue'
-import SleepInfo from '@/components/ui/sleepInfo.vue'
+import SleepPanel from '@/components/ui/SleepPanel.vue'
+import SleepLogsTable from '@/components/ui/SleepLogsTable.vue'
 
 const API_BASE = 'http://localhost:3000'
 
 export default {
-  components: { AppHeader, SleepChart, SleepInfo },
-
+  components: { AppHeader, SleepChart, SleepPanel, SleepLogsTable },
 
   data() {
     return {
@@ -111,15 +161,30 @@ export default {
       userName: '',
 
       limit: 14,
+
+      // modal
       isModalOpen: false,
       loading: false,
       error: '',
 
+      // form
       date: '',
       bedTime: '',
       wakeUpTime: '',
       quality: '',
-      notes: ''
+      notes: '',
+
+      // paginaçao
+      page: 1,
+      pageSize: 6,
+
+      // selection + sun data
+      selectedDay: null,
+      sunrise: null,
+      sunset: null,
+
+      // user location
+      location: { latitude: null, longitude: null }
     }
   },
 
@@ -128,15 +193,29 @@ export default {
       return useAuthStore().userId
     },
 
+    hasCoords() {
+      return this.location.latitude != null && this.location.longitude != null
+    },
+
     filteredSleepData() {
       const sorted = [...this.sleepData].sort((a, b) => (b.date || 0) - (a.date || 0))
       if (this.limit === 0) return sorted
       return sorted.slice(0, this.limit)
     },
 
+    totalPages() {
+      const total = this.filteredSleepData.length
+      return Math.max(1, Math.ceil(total / this.pageSize))
+    },
+
+    pagedSleepData() {
+      const start = (this.page - 1) * this.pageSize
+      return this.filteredSleepData.slice(start, start + this.pageSize)
+    },
+
     panelMetrics() {
       const data = [...this.sleepData]
-        .filter(x => x?.userId === this.userId)
+        .filter((x) => x?.userId === this.userId)
         .sort((a, b) => (b.date || 0) - (a.date || 0))
 
       const sample = data.slice(0, 7)
@@ -154,19 +233,19 @@ export default {
         }
       }
 
-      const durations = sample.map(x => Number(x.duration || 0)).filter(v => v > 0)
-      const qualities = sample.map(x => Number(x.quality || 0)).filter(v => v > 0)
+      const durations = sample.map((x) => Number(x.duration || 0)).filter((v) => v > 0)
+      const qualities = sample.map((x) => Number(x.quality || 0)).filter((v) => v > 0)
 
       const avgDuration = durations.reduce((a, b) => a + b, 0) / durations.length
       const avgQuality = qualities.length ? qualities.reduce((a, b) => a + b, 0) / qualities.length : 0
 
-      const bedTimes = sample.map(x => new Date(x.bedTime || 0)).filter(d => !isNaN(d))
-      const bedMinutes = bedTimes.map(d => d.getHours() * 60 + d.getMinutes())
+      const bedTimes = sample.map((x) => new Date(x.bedTime || 0)).filter((d) => !isNaN(d))
+      const bedMinutes = bedTimes.map((d) => d.getHours() * 60 + d.getMinutes())
 
       const regularityStd = stdDev(bedMinutes)
       const regularityScore = clamp(100 - (regularityStd / 90) * 100, 0, 100)
 
-      const durationScore = clamp((avgDuration / 8) * 100, 0, 100)
+      const durationScore = clamp((avgDuration / (8 * 60 * 60 * 1000)) * 100, 0, 100)
       const qualityScore = clamp((avgQuality / 5) * 100, 0, 100)
 
       return {
@@ -198,7 +277,7 @@ export default {
       function stdDev(arr) {
         if (!arr.length) return 0
         const m = mean(arr)
-        const v = mean(arr.map(x => (x - m) ** 2))
+        const v = mean(arr.map((x) => (x - m) ** 2))
         return Math.sqrt(v)
       }
 
@@ -214,9 +293,16 @@ export default {
   mounted() {
     this.fetchSleepData()
     this.welcomeUser()
+    this.fetchUserLocation()
   },
 
   methods: {
+    clearSelected() {
+      this.selectedDay = null
+      this.sunrise = null
+      this.sunset = null
+    },
+
     async welcomeUser() {
       if (!this.userId) return
       const res = await fetch(`${API_BASE}/users?id=${encodeURIComponent(this.userId)}`)
@@ -224,12 +310,71 @@ export default {
       this.userName = rows?.[0]?.userName || ''
     },
 
+    async fetchUserLocation() {
+      if (!this.userId) return
+      const res = await fetch(`${API_BASE}/users?id=${encodeURIComponent(this.userId)}`)
+      const rows = await res.json()
+      const u = rows?.[0]
+      if (!u?.location) return
+      if (u.location.latitude == null || u.location.longitude == null) return
+      this.location = u.location
+    },
+
     async fetchSleepData() {
       if (!this.userId) return
       const res = await fetch(`${API_BASE}/sleepData?userId=${encodeURIComponent(this.userId)}`)
       this.sleepData = await res.json()
 
+      this.page = 1
+      this.clearSelected()
+
       await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
+    },
+
+    async selectRow(row) {
+      if (!row?.id) return
+
+      this.selectedDay = row
+      this.sunrise = null
+      this.sunset = null
+
+      // sunrise/sunset se houver coords
+      if (!this.hasCoords) return
+
+      const formattedDate = new Date(row.date).toISOString().split('T')[0]
+      const response = await fetch(
+        `https://api.sunrise-sunset.org/json?lat=${Number(this.location.latitude)}&lng=${Number(this.location.longitude)}&date=${formattedDate}&formatted=0`
+      )
+      const data = await response.json()
+
+      this.sunrise = new Date(data.results.sunrise).toISOString().slice(11, 16)
+      this.sunset = new Date(data.results.sunset).toISOString().slice(11, 16)
+
+      const res2 = await fetch(`${API_BASE}/sleepData/${encodeURIComponent(row.id)}`)
+      const full = await res2.json()
+      this.selectedDay = full
+    },
+
+    openCreate() {
+      this.editingId = null
+      this.error = ''
+      this.loading = false
+
+      this.date = ''
+      this.bedTime = ''
+      this.wakeUpTime = ''
+      this.quality = ''
+      this.notes = ''
+
+      this.isModalOpen = true
+    },
+
+    prevPage() {
+      this.page = Math.max(1, this.page - 1)
+    },
+
+    nextPage() {
+      this.page = Math.min(this.totalPages, this.page + 1)
     },
 
     closeModal() {
@@ -263,7 +408,6 @@ export default {
 
       this.loading = true
       try {
-        // EDIT
         if (this.editingId) {
           const res = await fetch(`${API_BASE}/sleepData/${encodeURIComponent(this.editingId)}`, {
             method: 'PATCH',
@@ -274,13 +418,16 @@ export default {
           const updated = await res.json()
           this.sleepData = this.sleepData.map((x) => (x.id === updated.id ? updated : x))
 
+          this.page = 1
           await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
+
+          // se estava selecionado, atualiza painel
+          if (this.selectedDay?.id === updated.id) this.selectedDay = updated
 
           this.closeModal()
           return
         }
 
-        // CREATE
         const res = await fetch(`${API_BASE}/sleepData`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -290,8 +437,8 @@ export default {
         const created = await res.json()
         this.sleepData.push(created)
 
+        this.page = 1
         await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
-
         this.closeModal()
       } catch (e) {
         this.error = 'Failed to save. Try again.'
@@ -320,6 +467,10 @@ export default {
       await fetch(`${API_BASE}/sleepData/${encodeURIComponent(row.id)}`, { method: 'DELETE' })
       this.sleepData = this.sleepData.filter((x) => x.id !== row.id)
 
+      if (this.selectedDay?.id === row.id) this.clearSelected()
+
+      this.page = Math.min(this.page, this.totalPages)
+
       await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
     }
   }
@@ -328,7 +479,7 @@ export default {
 
 <style scoped>
 .dash {
-  padding: 26px 0 60px;
+  padding: 10px 0 14px;
   color: var(--text);
 }
 
@@ -336,41 +487,56 @@ export default {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-.dash_left {
+.dash_head {
   display: grid;
-  gap: 14px;
+  gap: 2px;
+}
+
+.dash_kicker {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.2;
 }
 
 .dash_title {
   margin: 0;
-  font-size: 26px;
-  letter-spacing: -0.3px;
+  font-size: 18px;
+  letter-spacing: -0.2px;
+  line-height: 1.1;
 }
 
-.dash_subtitle {
-  margin: 6px 0 0;
-  color: var(--muted);
-  font-size: 13px;
+.dash_add {
+  padding: 10px 12px;
 }
 
-.dash_layout {
+.dash_grid {
   display: grid;
-  grid-template-columns: 1.4fr 0.8fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 14px;
-  align-items: start;
+  align-items: stretch;
 }
 
-.dash_card {
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: var(--radius-lg);
-  padding: 14px;
+.dash_card_panel {
+  grid-column: 1;
+  grid-row: 1;
 }
 
+.dash_card_logs {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.dash_card_chart {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+/* cards */
 .dash_card_top {
   display: flex;
   align-items: center;
@@ -381,57 +547,58 @@ export default {
 
 .dash_card_title {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: -0.2px;
   color: var(--text);
 }
 
-.dash_controls {
+.dash_card_meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* pager */
+.pager {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.dash_select {
-  display: inline-flex;
-  align-items: center;
   gap: 8px;
-  color: var(--muted);
-  font-size: 12px;
 }
 
-.dash_select select {
+.pager_btn {
   border: 1px solid var(--border);
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(2, 6, 23, 0.25);
   color: var(--text);
   border-radius: 10px;
-  padding: 8px 10px;
-  outline: none;
+  padding: 6px 10px;
+  cursor: pointer;
 }
 
-.chart_wrap {
-  height: 340px;
-  max-height: 340px;
+.pager_btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pager_txt {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* chart */
+.chart_frame {
+  width: 100%;
   overflow: hidden;
 }
 
-.table_wrap {
-  max-height: 520px;
-  overflow-y: auto;
-  padding-right: 6px;
+.chart_frame_full {
+  aspect-ratio: 16 / 6;
+  max-height: 360px;
+  min-height: 260px;
 }
 
-.table_wrap::-webkit-scrollbar {
-  width: 8px;
-}
-
-.table_wrap::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.10);
-  border-radius: 999px;
-}
-
-.table_wrap::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 177, 106, 0.22);
+.coord_hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 .overlay {
@@ -535,18 +702,31 @@ export default {
   margin-top: 6px;
 }
 
+/* Mobile */
 @media (max-width: 980px) {
-  .dash_layout {
+  .dash {
+    padding: 18px 0 50px;
+  }
+
+  .dash_grid {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
   }
 
-  .chart_wrap {
-    height: 300px;
-    max-height: 300px;
+  .dash_card_panel,
+  .dash_card_logs,
+  .dash_card_chart {
+    grid-column: 1;
   }
 
-  .table_wrap {
-    max-height: 420px;
+  .dash_card_panel { grid-row: 1; }
+  .dash_card_logs { grid-row: 2; }
+  .dash_card_chart { grid-row: 3; }
+
+  .chart_frame_full {
+    aspect-ratio: 16 / 9;
+    max-height: 320px;
+    min-height: 240px;
   }
 }
 </style>

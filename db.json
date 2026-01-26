@@ -50,8 +50,8 @@
       "userName": "Laxingo",
       "email": "goncalo@gmail.com",
       "password": "123",
-      "level": 1,
-      "xp": 0,
+      "level": 3,
+      "xp": 500,
       "isAdmin": false,
       "location": {
         "latitude": 41.19522739510371,
@@ -147,6 +147,19 @@
         "longitude": null
       },
       "xp": 450,
+      "isAdmin": false
+    },
+    {
+      "id": "2ac5",
+      "userName": "jjj",
+      "email": "jjj@gmail.com",
+      "password": "123",
+      "level": 1,
+      "location": {
+        "latitude": null,
+        "longitude": null
+      },
+      "xp": 0,
       "isAdmin": false
     }
   ],
@@ -320,16 +333,6 @@
       "duration": 27000000,
       "quality": 4,
       "notes": "Quase impossivel sair da cama"
-    },
-    {
-      "id": "6c1b",
-      "userId": "b54f",
-      "date": 1768176000000,
-      "bedTime": 1768255200000,
-      "wakeUpTime": 1768294800000,
-      "duration": 39600000,
-      "quality": 5,
-      "notes": ""
     },
     {
       "id": "f405",
@@ -570,76 +573,6 @@
       "duration": 86400000,
       "quality": 5,
       "notes": ""
-    },
-    {
-      "id": "daf1",
-      "userId": "b54f",
-      "date": 1769385600000,
-      "bedTime": 1769390640000,
-      "wakeUpTime": 1769477040000,
-      "duration": 86400000,
-      "quality": 5,
-      "notes": "aaaaa"
-    },
-    {
-      "id": "0a17",
-      "userId": "b54f",
-      "date": 1769385600000,
-      "bedTime": 1769390640000,
-      "wakeUpTime": 1769477040000,
-      "duration": 86400000,
-      "quality": 5,
-      "notes": "aaaaa"
-    },
-    {
-      "id": "e043",
-      "userId": "b54f",
-      "date": 1769385600000,
-      "bedTime": 1769390640000,
-      "wakeUpTime": 1769477040000,
-      "duration": 86400000,
-      "quality": 5,
-      "notes": "aaaaa"
-    },
-    {
-      "id": "0bdb",
-      "userId": "b54f",
-      "date": 1769385600000,
-      "bedTime": 1769390640000,
-      "wakeUpTime": 1769477040000,
-      "duration": 86400000,
-      "quality": 5,
-      "notes": "aaaaa"
-    },
-    {
-      "id": "7999",
-      "userId": "b54f",
-      "date": 1769385600000,
-      "bedTime": 1769390640000,
-      "wakeUpTime": 1769477040000,
-      "duration": 86400000,
-      "quality": 5,
-      "notes": "aaaaa"
-    },
-    {
-      "id": "2360",
-      "userId": "b54f",
-      "date": 1769385600000,
-      "bedTime": 1769390640000,
-      "wakeUpTime": 1769477040000,
-      "duration": 86400000,
-      "quality": 5,
-      "notes": "aaaaa"
-    },
-    {
-      "id": "20ef",
-      "userId": "b54f",
-      "date": 1769385600000,
-      "bedTime": 1769390640000,
-      "wakeUpTime": 1769477040000,
-      "duration": 86400000,
-      "quality": 5,
-      "notes": "aaaaa"
     }
   ],
   "quests": [
@@ -661,7 +594,7 @@
       "xpReward": 200,
       "goal": 5
     },
-     {
+    {
       "id": "4",
       "description": "Enter 14 Sleep Logs",
       "xpReward": 250,
@@ -728,16 +661,16 @@
     {
       "userId": "17c5",
       "questId": 2,
-      "progress": 6,
-      "completed": false,
+      "progress": 7,
+      "completed": true,
       "id": "uq-17c5-2",
       "claimed": false
     },
     {
       "userId": "17c5",
       "questId": 3,
-      "progress": 2,
-      "completed": false,
+      "progress": 5,
+      "completed": true,
       "id": "uq-17c5-3",
       "claimed": false
     },
@@ -793,24 +726,24 @@
       "id": "0be6",
       "userId": "b54f",
       "questId": 1,
-      "progress": 1,
-      "completed": true,
+      "progress": 0,
+      "completed": false,
       "claimed": true
     },
     {
       "id": "57ea",
       "userId": "b54f",
       "questId": 2,
-      "progress": 7,
-      "completed": true,
+      "progress": 0,
+      "completed": false,
       "claimed": true
     },
     {
       "id": "9a9d",
       "userId": "b54f",
       "questId": 3,
-      "progress": 5,
-      "completed": true,
+      "progress": 0,
+      "completed": false,
       "claimed": true
     },
     {
@@ -1001,7 +934,7 @@
       "id": "34b4",
       "userId": "b54f",
       "questId": 4,
-      "progress": 8,
+      "progress": 0,
       "completed": false,
       "claimed": false
     },
@@ -1009,7 +942,7 @@
       "id": "ae95",
       "userId": "b54f",
       "questId": 5,
-      "progress": 1,
+      "progress": 0,
       "completed": false,
       "claimed": false
     },
@@ -1017,25 +950,129 @@
       "id": "a8fb",
       "userId": "b54f",
       "questId": 6,
-      "progress": 5,
-      "completed": true,
+      "progress": 0,
+      "completed": false,
       "claimed": true
     },
     {
       "id": "d015",
       "userId": "b54f",
       "questId": 7,
-      "progress": 3,
-      "completed": true,
+      "progress": 0,
+      "completed": false,
       "claimed": true
     },
     {
       "id": "130d",
       "userId": "b54f",
       "questId": 8,
-      "progress": 5,
+      "progress": 0,
+      "completed": false,
+      "claimed": true
+    },
+    {
+      "id": "1b3b",
+      "userId": "2ac5",
+      "questId": 1,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "76a6",
+      "userId": "2ac5",
+      "questId": 2,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "1804",
+      "userId": "2ac5",
+      "questId": 3,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "082e",
+      "userId": "2ac5",
+      "questId": 4,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "3e13",
+      "userId": "2ac5",
+      "questId": 5,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "caf0",
+      "userId": "2ac5",
+      "questId": 6,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "8846",
+      "userId": "2ac5",
+      "questId": 7,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "5748",
+      "userId": "2ac5",
+      "questId": 8,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "8908",
+      "userId": "e0be",
+      "questId": 4,
+      "progress": 12,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "4b60",
+      "userId": "e0be",
+      "questId": 5,
+      "progress": 7,
       "completed": true,
       "claimed": true
+    },
+    {
+      "id": "07c1",
+      "userId": "e0be",
+      "questId": 6,
+      "progress": 3.9,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "448c",
+      "userId": "e0be",
+      "questId": 7,
+      "progress": 3,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "f773",
+      "userId": "e0be",
+      "questId": 8,
+      "progress": 1,
+      "completed": false,
+      "claimed": false
     }
   ]
 }
