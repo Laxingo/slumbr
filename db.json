@@ -50,8 +50,8 @@
       "userName": "Laxingo",
       "email": "goncalo@gmail.com",
       "password": "123",
-      "level": 1,
-      "xp": 0,
+      "level": 6,
+      "xp": 1000,
       "isAdmin": false,
       "location": {
         "latitude": 41.19522739510371,
@@ -520,6 +520,56 @@
       "duration": 36000000,
       "quality": 3,
       "notes": "Barulho dos vizinhos perturbou um pouco"
+    },
+    {
+      "id": "1759",
+      "userId": "e0be",
+      "date": 1769472000000,
+      "bedTime": 1769475360000,
+      "wakeUpTime": 1769561760000,
+      "duration": 86400000,
+      "quality": 5,
+      "notes": ""
+    },
+    {
+      "id": "7bd1",
+      "userId": "e0be",
+      "date": 1769472000000,
+      "bedTime": 1769475360000,
+      "wakeUpTime": 1769561760000,
+      "duration": 86400000,
+      "quality": 5,
+      "notes": ""
+    },
+    {
+      "id": "fbb0",
+      "userId": "e0be",
+      "date": 1769472000000,
+      "bedTime": 1769475360000,
+      "wakeUpTime": 1769561760000,
+      "duration": 86400000,
+      "quality": 5,
+      "notes": ""
+    },
+    {
+      "id": "a16c",
+      "userId": "e0be",
+      "date": 1769472000000,
+      "bedTime": 1769475360000,
+      "wakeUpTime": 1769561760000,
+      "duration": 86400000,
+      "quality": 5,
+      "notes": ""
+    },
+    {
+      "id": "bcce",
+      "userId": "e0be",
+      "date": 1769472000000,
+      "bedTime": 1769475360000,
+      "wakeUpTime": 1769561760000,
+      "duration": 86400000,
+      "quality": 5,
+      "notes": ""
     }
   ],
   "quests": [
@@ -538,6 +588,36 @@
     {
       "id": "3",
       "description": "Sleep at least 8 hours for 5 nights in a week",
+      "xpReward": 200,
+      "goal": 5
+    },
+    {
+      "id": "4",
+      "description": "Enter 14 Sleep Logs",
+      "xpReward": 250,
+      "goal": 14
+    },
+    {
+      "id": "5",
+      "description": "Maintain a 7-day logging streak",
+      "xpReward": 300,
+      "goal": 7
+    },
+    {
+      "id": "6",
+      "description": "Average sleep quality ≥ 4.0 (last 7 logs)",
+      "xpReward": 250,
+      "goal": 4
+    },
+    {
+      "id": "7",
+      "description": "Sleep at least 8 hours for 3 nights in a week",
+      "xpReward": 200,
+      "goal": 3
+    },
+    {
+      "id": "8",
+      "description": "Add notes to 5 sleep logs",
       "xpReward": 200,
       "goal": 5
     }
@@ -578,16 +658,16 @@
     {
       "userId": "17c5",
       "questId": 2,
-      "progress": 4,
-      "completed": false,
+      "progress": 7,
+      "completed": true,
       "id": "uq-17c5-2",
       "claimed": false
     },
     {
       "userId": "17c5",
       "questId": 3,
-      "progress": 2,
-      "completed": false,
+      "progress": 5,
+      "completed": true,
       "id": "uq-17c5-3",
       "claimed": false
     },
@@ -787,25 +867,89 @@
       "id": "0c6a",
       "userId": "2693",
       "questId": 1,
-      "progress": 1,
-      "completed": true,
+      "progress": 0,
+      "completed": false,
       "claimed": true
     },
     {
       "id": "6371",
       "userId": "2693",
       "questId": 2,
-      "progress": 7,
-      "completed": true,
+      "progress": 0,
+      "completed": false,
       "claimed": true
     },
     {
       "id": "bd09",
       "userId": "2693",
       "questId": 3,
-      "progress": 5,
+      "progress": 0,
+      "completed": false,
+      "claimed": true
+    },
+    {
+      "id": "6887",
+      "userId": "2693",
+      "questId": 4,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "8480",
+      "userId": "2693",
+      "questId": 5,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "a0d4",
+      "userId": "2693",
+      "questId": 6,
+      "progress": 0,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "c1cf",
+      "userId": "e0be",
+      "questId": 4,
+      "progress": 14,
       "completed": true,
       "claimed": true
+    },
+    {
+      "id": "4304",
+      "userId": "e0be",
+      "questId": 5,
+      "progress": 7,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "efd7",
+      "userId": "e0be",
+      "questId": 6,
+      "progress": 4.6,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "79ef",
+      "userId": "e0be",
+      "questId": 7,
+      "progress": 3,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "707f",
+      "userId": "e0be",
+      "questId": 8,
+      "progress": 1,
+      "completed": false,
+      "claimed": false
     }
   ]
 }
