@@ -128,12 +128,12 @@
       "userName": "pato",
       "email": "pato@gmail.com",
       "password": "123",
-      "level": 3,
+      "level": 4,
       "location": {
         "latitude": null,
         "longitude": null
       },
-      "xp": 450,
+      "xp": 650,
       "isAdmin": false
     },
     {
@@ -948,6 +948,46 @@
       "userId": "e0be",
       "questId": 8,
       "progress": 1,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "35e3",
+      "userId": "a127",
+      "questId": 4,
+      "progress": 7,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "aac4",
+      "userId": "a127",
+      "questId": 5,
+      "progress": 2,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "b94d",
+      "userId": "a127",
+      "questId": 6,
+      "progress": 3.3,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "5869",
+      "userId": "a127",
+      "questId": 7,
+      "progress": 3,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "7644",
+      "userId": "a127",
+      "questId": 8,
+      "progress": 0,
       "completed": false,
       "claimed": false
     }
