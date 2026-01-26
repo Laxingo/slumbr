@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <AppHeader />
+
     <main class="container dash">
+      <!-- Top-->
       <div class="dash_top">
         <div class="dash_head">
           <div class="dash_kicker">Welcome, {{ userName }}.</div>
@@ -15,7 +17,7 @@
 
       <!-- Grid -->
       <div class="dash_grid">
-        <!-- Panel -->
+        <!-- Panel-->
         <section class="dash_card dash_card_panel">
           <div class="dash_card_top">
             <h2 class="dash_card_title">Summary</h2>
@@ -35,7 +37,7 @@
           />
         </section>
 
-        <!-- Logs  -->
+        <!-- Logs-->
         <section class="dash_card dash_card_logs">
           <div class="dash_card_top">
             <h2 class="dash_card_title">Logs</h2>
@@ -62,8 +64,17 @@
             @select="selectRow"
           />
 
-          <div v-if="!hasCoords" class="coord_hint">
-            To see sunrise/sunset, set your location (user profile location must have latitude/longitude).
+          <!-- Location helper -->
+          <div class="coord_box" v-if="!hasCoords">
+            <div class="coord_text">
+              Sunrise/sunset requires your location.
+            </div>
+
+            <button class="btnMini" type="button" @click="requestLocation" :disabled="locLoading">
+              {{ locLoading ? 'Getting location...' : 'Set location' }}
+            </button>
+
+            <p v-if="locError" class="coord_error">{{ locError }}</p>
           </div>
         </section>
 
@@ -184,7 +195,9 @@ export default {
       sunset: null,
 
       // user location
-      location: { latitude: null, longitude: null }
+      location: { latitude: null, longitude: null },
+      locLoading: false,
+      locError: ''
     }
   },
 
@@ -320,6 +333,100 @@ export default {
       this.location = u.location
     },
 
+    async requestLocation() {
+      this.locError = ''
+
+      if (!navigator.geolocation) {
+        this.locError = 'Geolocation is not supported by this browser.'
+        return
+      }
+
+      this.locLoading = true
+      try {
+        const coords = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => resolve(pos.coords),
+            (err) => reject(err),
+            { enableHighAccuracy: true, timeout: 10000 }
+          )
+        })
+
+        const newLoc = { latitude: coords.latitude, longitude: coords.longitude }
+
+        // Guarda na BD (JSON Server / API)
+        await fetch(`${API_BASE}/users/${encodeURIComponent(this.userId)}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ location: newLoc })
+        })
+
+        this.location = newLoc
+
+        // atualiza sunrise/sunset
+        if (this.selectedDay?.date) {
+          await this.refreshSunForSelected()
+        }
+      } catch (e) {
+        this.locError = 'Failed to get location. Check browser permissions and try again.'
+        console.error(e)
+      } finally {
+        this.locLoading = false
+      }
+    },
+
+    async refreshSunForSelected() {
+      if (!this.selectedDay?.date) return
+      if (!this.hasCoords) return
+
+      try {
+        const formattedDate = new Date(this.selectedDay.date).toISOString().split('T')[0]
+        const url =
+          `https://api.sunrise-sunset.org/json` +
+          `?lat=${Number(this.location.latitude)}` +
+          `&lng=${Number(this.location.longitude)}` +
+          `&date=${formattedDate}` +
+          `&formatted=0`
+
+        const response = await fetch(url)
+        const data = await response.json()
+        if (data?.status !== 'OK') return
+
+        // Hora local
+        this.sunrise = new Date(data.results.sunrise).toLocaleTimeString('pt-PT', {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+        this.sunset = new Date(data.results.sunset).toLocaleTimeString('pt-PT', {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      } catch (e) {
+        console.error('Failed to refresh sunrise/sunset:', e)
+      }
+    },
+
+    async selectRow(row) {
+      if (!row?.id) return
+      this.selectedDay = row
+      this.sunrise = null
+      this.sunset = null
+
+      // coords 
+      if (!this.hasCoords) {
+        await this.fetchUserLocation()
+      }
+      if (!this.hasCoords) return
+
+      await this.refreshSunForSelected()
+
+      try {
+        const res2 = await fetch(`${API_BASE}/sleepData/${encodeURIComponent(row.id)}`)
+        this.selectedDay = await res2.json()
+      } catch (e) {
+        console.error(e)
+      }
+    },
+
     async fetchSleepData() {
       if (!this.userId) return
       const res = await fetch(`${API_BASE}/sleepData?userId=${encodeURIComponent(this.userId)}`)
@@ -329,30 +436,6 @@ export default {
       this.clearSelected()
 
       await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
-    },
-
-    async selectRow(row) {
-      if (!row?.id) return
-
-      this.selectedDay = row
-      this.sunrise = null
-      this.sunset = null
-
-      // sunrise/sunset se houver coords
-      if (!this.hasCoords) return
-
-      const formattedDate = new Date(row.date).toISOString().split('T')[0]
-      const response = await fetch(
-        `https://api.sunrise-sunset.org/json?lat=${Number(this.location.latitude)}&lng=${Number(this.location.longitude)}&date=${formattedDate}&formatted=0`
-      )
-      const data = await response.json()
-
-      this.sunrise = new Date(data.results.sunrise).toISOString().slice(11, 16)
-      this.sunset = new Date(data.results.sunset).toISOString().slice(11, 16)
-
-      const res2 = await fetch(`${API_BASE}/sleepData/${encodeURIComponent(row.id)}`)
-      const full = await res2.json()
-      this.selectedDay = full
     },
 
     openCreate() {
@@ -421,8 +504,10 @@ export default {
           this.page = 1
           await useQuestsStore().syncAllFromSleepData(this.userId, this.sleepData)
 
-          // se estava selecionado, atualiza painel
-          if (this.selectedDay?.id === updated.id) this.selectedDay = updated
+          if (this.selectedDay?.id === updated.id) {
+            this.selectedDay = updated
+            await this.refreshSunForSelected()
+          }
 
           this.closeModal()
           return
@@ -513,6 +598,7 @@ export default {
   padding: 10px 12px;
 }
 
+/* GRID */
 .dash_grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -536,7 +622,7 @@ export default {
   grid-row: 2;
 }
 
-/* cards */
+/* top row inside cards */
 .dash_card_top {
   display: flex;
   align-items: center;
@@ -595,12 +681,46 @@ export default {
   min-height: 260px;
 }
 
-.coord_hint {
+/* location helper */
+.coord_box {
   margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(2, 6, 23, 0.25);
+  display: grid;
+  gap: 8px;
+}
+
+.coord_text {
   font-size: 12px;
   color: var(--muted);
 }
 
+.coord_error {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(248, 113, 113, 0.95);
+}
+
+/* Mini button */
+.btnMini {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 7px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.btnMini:hover {
+  border-color: rgba(212, 177, 106, 0.35);
+  background: rgba(212, 177, 106, 0.08);
+}
+
+/* Modal */
 .overlay {
   position: fixed;
   inset: 0;

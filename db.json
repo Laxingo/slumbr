@@ -65,8 +65,8 @@
       "password": "123",
       "level": 6,
       "location": {
-        "latitude": null,
-        "longitude": null
+        "latitude": 41.36757716270884,
+        "longitude": -8.73905054384959
       },
       "xp": 1100,
       "isAdmin": false
@@ -160,6 +160,19 @@
         "longitude": null
       },
       "xp": 0,
+      "isAdmin": false
+    },
+    {
+      "id": "9cd6",
+      "userName": "Goncalo",
+      "email": "goncalochaves@gmail.com",
+      "password": "123",
+      "level": 4,
+      "location": {
+        "latitude": 41.36757716270884,
+        "longitude": -8.739049596247446
+      },
+      "xp": 750,
       "isAdmin": false
     }
   ],
@@ -572,6 +585,76 @@
       "wakeUpTime": 1769561760000,
       "duration": 86400000,
       "quality": 5,
+      "notes": ""
+    },
+    {
+      "id": "7be3",
+      "userId": "9cd6",
+      "date": 1768780800000,
+      "bedTime": 1768863600000,
+      "wakeUpTime": 1768892400000,
+      "duration": 28800000,
+      "quality": 4,
+      "notes": ""
+    },
+    {
+      "id": "814d",
+      "userId": "9cd6",
+      "date": 1768867200000,
+      "bedTime": 1768951800000,
+      "wakeUpTime": 1768978800000,
+      "duration": 27000000,
+      "quality": 4,
+      "notes": ""
+    },
+    {
+      "id": "47e6",
+      "userId": "9cd6",
+      "date": 1768953600000,
+      "bedTime": 1769032800000,
+      "wakeUpTime": 1769061600000,
+      "duration": 28800000,
+      "quality": 5,
+      "notes": ""
+    },
+    {
+      "id": "afda",
+      "userId": "9cd6",
+      "date": 1769040000000,
+      "bedTime": 1769126340000,
+      "wakeUpTime": 1769148000000,
+      "duration": 21660000,
+      "quality": 2,
+      "notes": ""
+    },
+    {
+      "id": "b0d6",
+      "userId": "9cd6",
+      "date": 1769126400000,
+      "bedTime": 1769205600000,
+      "wakeUpTime": 1769238000000,
+      "duration": 32400000,
+      "quality": 3,
+      "notes": ""
+    },
+    {
+      "id": "d939",
+      "userId": "9cd6",
+      "date": 1769212800000,
+      "bedTime": 1769295600000,
+      "wakeUpTime": 1769313600000,
+      "duration": 18000000,
+      "quality": 4,
+      "notes": ""
+    },
+    {
+      "id": "7879",
+      "userId": "9cd6",
+      "date": 1769299200000,
+      "bedTime": 1769378400000,
+      "wakeUpTime": 1769407200000,
+      "duration": 28800000,
+      "quality": 3,
       "notes": ""
     }
   ],
@@ -1071,6 +1154,70 @@
       "userId": "e0be",
       "questId": 8,
       "progress": 1,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "1328",
+      "userId": "9cd6",
+      "questId": 1,
+      "progress": 1,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "0e84",
+      "userId": "9cd6",
+      "questId": 2,
+      "progress": 7,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "54df",
+      "userId": "9cd6",
+      "questId": 3,
+      "progress": 4,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "0907",
+      "userId": "9cd6",
+      "questId": 4,
+      "progress": 7,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "5181",
+      "userId": "9cd6",
+      "questId": 5,
+      "progress": 7,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "67b0",
+      "userId": "9cd6",
+      "questId": 6,
+      "progress": 3.6,
+      "completed": false,
+      "claimed": false
+    },
+    {
+      "id": "58ae",
+      "userId": "9cd6",
+      "questId": 7,
+      "progress": 3,
+      "completed": true,
+      "claimed": true
+    },
+    {
+      "id": "f117",
+      "userId": "9cd6",
+      "questId": 8,
+      "progress": 0,
       "completed": false,
       "claimed": false
     }
