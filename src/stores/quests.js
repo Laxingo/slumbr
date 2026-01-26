@@ -16,7 +16,12 @@ export const useQuestsStore = defineStore('quests', {
         questInfoById: (state) => (questId) =>
             state.questDetails.find(q => String(q.id) === String(questId)),
 
-        canClaim: () => (uq) => uq?.completed === true && uq?.claimed === false
+        canClaim: () => (uq) => uq?.completed === true && uq?.claimed === false,
+        
+        claimableCount(state) {
+            return (state.userQuests || []).filter(q => q.completed === true && q.claimed === false).length
+        }
+
     },
 
     actions: {

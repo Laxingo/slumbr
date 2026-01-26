@@ -85,19 +85,7 @@
         </div>
       </div>
 
-      <br />
 
-      <aside class="dash_right">
-        <div class="dash_card">
-          <div class="dash_card_top">
-            <h2 class="dash_card_title">Quests</h2>
-          </div>
-
-          <div class="table_wrap">
-            <QuestList />
-          </div>
-        </div>
-      </aside>
     </main>
   </div>
 </template>
@@ -108,13 +96,12 @@ import { useAuthStore } from '@/stores/auth'
 
 import AppHeader from '@/components/ui/Header.vue'
 import SleepChart from '@/components/ui/SleepChart.vue'
-import QuestList from '@/components/ui/QuestList.vue'
 import SleepInfo from '@/components/ui/sleepInfo.vue'
 
 const API_BASE = 'http://localhost:3000'
 
 export default {
-  components: { AppHeader, SleepChart, QuestList, SleepInfo },
+  components: { AppHeader, SleepChart, SleepInfo },
 
 
   data() {

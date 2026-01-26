@@ -1,10 +1,12 @@
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useQuestsStore } from '@/stores/quests'
 
 const router = useRouter()
 const auth = useAuthStore()
+const quests = useQuestsStore()
 
 const isAuthed = computed(() => auth.isAuthenticated)
 
@@ -14,10 +16,24 @@ const xpPerLevel = computed(() => auth.xpPerLevel)
 const xpProgressPct = computed(() => auth.xpProgressPct)
 const userTitle = computed(() => auth.userTitle)
 
+const claimableCount = computed(() => quests.claimableCount || 0)
+
 onMounted(async () => {
   if (auth.isAuthenticated) await auth.fetchMe()
 })
 
+watch(
+  () => auth.userId,
+  async (id) => {
+    if (!id) return
+    await quests.init(id)
+  },
+  { immediate: true }
+)
+
+function goQuests() {
+  router.push('/quests')
+}
 function goDashboard() {
   router.push('/dashboard')
 }
@@ -38,7 +54,6 @@ function logout() {
         <span class="brand_tag">sleep tracking</span>
       </RouterLink>
 
-
       <!-- XP / LEVEL (quando ta logado) -->
       <div v-if="isAuthed" class="xp_card" aria-label="User level and XP">
         <div class="xp_top">
@@ -50,11 +65,13 @@ function logout() {
           <span class="xp_text">{{ xpIntoLevel }} / {{ xpPerLevel }} XP</span>
         </div>
 
-
-
-
-        <div class="xp_bar" role="progressbar" :aria-valuenow="Math.round(xpProgressPct)" aria-valuemin="0"
-          aria-valuemax="100">
+        <div
+          class="xp_bar"
+          role="progressbar"
+          :aria-valuenow="Math.round(xpProgressPct)"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
           <div class="xp_fill" :style="{ width: xpProgressPct + '%' }"></div>
           <div class="xp_glow" :style="{ width: xpProgressPct + '%' }"></div>
         </div>
@@ -72,17 +89,27 @@ function logout() {
             Dashboard
           </button>
 
+          <button class="btn btn-ghost quests_btn" type="button" @click="goQuests">
+            Quests
+            <span v-if="claimableCount > 0" class="quests_badge">{{ claimableCount }}</span>
+          </button>
+
           <button class="btn btn-ghost" type="button" @click="logout">
             Logout
           </button>
         </div>
 
-        <button v-if="!isAuthed" class="btn btn-ghost" type="button" @click="$router.push('/login')">
+        <button
+          v-if="!isAuthed"
+          class="btn btn-ghost"
+          type="button"
+          @click="$router.push('/login')"
+        >
           Login
         </button>
       </nav>
 
-      <nav class="nav" v-if="$route.path == '/dashboard'">
+      <nav class="nav" v-else>
         <div class="nav_actions">
           <button class="btn btn-ghost" type="button" @click="goHome">
             Home
@@ -92,6 +119,11 @@ function logout() {
         <div class="nav_actions" v-if="isAuthed">
           <button class="btn btn-secondary" type="button" @click="goDashboard">
             Dashboard
+          </button>
+
+          <button class="btn btn-ghost quests_btn" type="button" @click="goQuests">
+            Quests
+            <span v-if="claimableCount > 0" class="quests_badge">{{ claimableCount }}</span>
           </button>
 
           <button class="btn btn-ghost" type="button" @click="logout">
@@ -110,9 +142,11 @@ function logout() {
   z-index: 50;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  background: linear-gradient(180deg,
-      rgba(12, 14, 20, 0.82) 0%,
-      rgba(12, 14, 20, 0.62) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(12, 14, 20, 0.82) 0%,
+    rgba(12, 14, 20, 0.62) 100%
+  );
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -156,9 +190,16 @@ function logout() {
 
 .xp_top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
+}
+
+.xp_left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
 .lvl_badge {
@@ -170,24 +211,19 @@ function logout() {
   color: rgba(212, 177, 106, 0.9);
 }
 
-.xp_text {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.70);
-}
-
-/* TITLE */
-.title_row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-top: -2px;
-}
-
 .user_title {
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.62);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.xp_text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
 }
 
 .xp_bar {
@@ -195,17 +231,15 @@ function logout() {
   height: 9px;
   border-radius: 999px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.10);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .xp_fill {
   height: 100%;
   border-radius: 999px;
   width: 0%;
-  background: linear-gradient(90deg,
-      rgb(212, 177, 106),
-      rgba(212, 177, 106, 0.2));
+  background: linear-gradient(90deg, rgb(212, 177, 106), rgba(212, 177, 106, 0.2));
   transition: width 220ms ease;
 }
 
@@ -216,11 +250,29 @@ function logout() {
   width: 0%;
   pointer-events: none;
   transition: width 220ms ease;
-  background: radial-gradient(closest-side,
-      rgba(255, 255, 255, 0.35),
-      rgba(255, 255, 255, 0.0));
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0));
   filter: blur(6px);
   opacity: 0.85;
+}
+
+/* Quests badge */
+.quests_btn {
+  position: relative;
+}
+
+.quests_badge {
+  margin-left: 8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(12, 14, 20, 0.95);
+  background: rgba(212, 177, 106, 0.95);
 }
 
 /* Responsivo: em ecrãs pequenos, reduz/oculta o card */
