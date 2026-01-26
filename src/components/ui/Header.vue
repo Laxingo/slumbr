@@ -1,10 +1,12 @@
 <script setup>
 import { computed, onMounted, watch } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
+import { useRouter, useRoute, RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useQuestsStore } from '@/stores/quests'
 
 const router = useRouter()
+const route = useRoute()
+
 const auth = useAuthStore()
 const quests = useQuestsStore()
 
@@ -17,6 +19,11 @@ const xpProgressPct = computed(() => auth.xpProgressPct)
 const userTitle = computed(() => auth.userTitle)
 
 const claimableCount = computed(() => quests.claimableCount || 0)
+
+
+const isHome = computed(() => route.path === '/')
+const isDashboard = computed(() => route.path === '/dashboard')
+const isQuests = computed(() => route.path === '/quests')
 
 onMounted(async () => {
   if (auth.isAuthenticated) await auth.fetchMe()
@@ -77,19 +84,35 @@ function logout() {
         </div>
       </div>
 
-      <nav class="nav" v-if="$route.path !== '/dashboard'">
+      <!-- NAV  -->
+      <nav class="nav">
         <div class="nav_actions">
-          <button class="btn btn-secondary" type="button" @click="goHome">
+          <button
+            class="btn"
+            :class="isHome ? 'btn-secondary' : 'btn-ghost'"
+            type="button"
+            @click="goHome"
+          >
             Home
           </button>
         </div>
 
         <div class="nav_actions" v-if="isAuthed">
-          <button class="btn btn-ghost" type="button" @click="goDashboard">
+          <button
+            class="btn"
+            :class="isDashboard ? 'btn-secondary' : 'btn-ghost'"
+            type="button"
+            @click="goDashboard"
+          >
             Dashboard
           </button>
 
-          <button class="btn btn-ghost quests_btn" type="button" @click="goQuests">
+          <button
+            class="btn quests_btn"
+            :class="isQuests ? 'btn-secondary' : 'btn-ghost'"
+            type="button"
+            @click="goQuests"
+          >
             Quests
             <span v-if="claimableCount > 0" class="quests_badge">{{ claimableCount }}</span>
           </button>
@@ -107,29 +130,6 @@ function logout() {
         >
           Login
         </button>
-      </nav>
-
-      <nav class="nav" v-else>
-        <div class="nav_actions">
-          <button class="btn btn-ghost" type="button" @click="goHome">
-            Home
-          </button>
-        </div>
-
-        <div class="nav_actions" v-if="isAuthed">
-          <button class="btn btn-secondary" type="button" @click="goDashboard">
-            Dashboard
-          </button>
-
-          <button class="btn btn-ghost quests_btn" type="button" @click="goQuests">
-            Quests
-            <span v-if="claimableCount > 0" class="quests_badge">{{ claimableCount }}</span>
-          </button>
-
-          <button class="btn btn-ghost" type="button" @click="logout">
-            Logout
-          </button>
-        </div>
       </nav>
     </div>
   </header>
