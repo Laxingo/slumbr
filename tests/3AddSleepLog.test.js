@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 
 describe('posting sleep data', () => {
   it('posts sleep data successfully', async () => {
-    const payload = { hours: 7, date: '2026-01-25' }
+    const payload = { hours: 86400000, date: 1769385800000 }
     const sleepData = []
 
     vi.stubGlobal('fetch', vi.fn(() =>
@@ -36,7 +36,7 @@ describe('posting sleep data', () => {
   })
 
   it('handles fetch failure', async () => {
-    const payload = { hours: 7, date: '2026-01-25' }
+    const payload = { hours: 86400000, date: 1769385800000 }
     const sleepData = []
 
     vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('Network error'))))
