@@ -660,6 +660,36 @@
       "description": "Sleep at least 8 hours for 5 nights in a week",
       "xpReward": 200,
       "goal": 5
+    },
+     {
+      "id": "4",
+      "description": "Enter 14 Sleep Logs",
+      "xpReward": 250,
+      "goal": 14
+    },
+    {
+      "id": "5",
+      "description": "Maintain a 7-day logging streak",
+      "xpReward": 300,
+      "goal": 7
+    },
+    {
+      "id": "6",
+      "description": "Average sleep quality ≥ 4.0 (last 7 logs)",
+      "xpReward": 250,
+      "goal": 4
+    },
+    {
+      "id": "7",
+      "description": "Sleep at least 8 hours for 3 nights in a week",
+      "xpReward": 200,
+      "goal": 3
+    },
+    {
+      "id": "8",
+      "description": "Add notes to 5 sleep logs",
+      "xpReward": 200,
+      "goal": 5
     }
   ],
   "userQuests": [
